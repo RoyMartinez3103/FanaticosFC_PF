@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/layout :: head}">
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+  <!-- Sidebar -->
+  <ul th:replace="~{layout/layout :: sidebar}"></ul>
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+      <!-- Topbar -->
+      <nav th:replace="~{layout/layout :: topbar}"></nav>
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800" th:text="${contenido}"></h1>
+
+        <div th:replace="~{layout/layout :: alerts}"></div>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Detalle de Ventas</h6>
+            <a href="/detalleVenta/alta-detalleVenta" class="btn btn-primary btn-sm float-right">
+              <i class="fas fa-plus"></i> Agregar Detalle Venta
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cantidad de Playeras</th>
+                  <th>Playera</th>
+                  <th>Venta</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="detalle,stat : ${detalleVenta}">
+                  <td th:text="${detalle.idDetalleVenta}"></td>
+                  <td th:text="${detalle.cantidadPlayeras}"></td>
+                  <td th:text="${detalle.playera}"></td>
+                  <td th:text="${detalle.venta.idVenta}"></td>
+
+                  <td>
+                    <a th:href="@{/detalleVenta/editar-detalleVenta/} + ${detalle.idDetalleVenta}" class="btn btn-warning btn-sm">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a th:href="@{/detalleVenta/eliminar-detalleVenta/} + ${detalle.idDetalleVenta}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Estás seguro de eliminar este detalleVenta?')">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.container-fluid -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/layout :: footer}"></footer>
+  </div>
+</div>
+
+<!-- Scripts -->
+<div th:replace="~{layout/layout :: scripts}"></div>
+</body>
+</html>

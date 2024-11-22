@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/layout :: head}">
+</head>
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+  <!-- Sidebar -->
+  <ul th:replace="~{layout/layout :: sidebar}"></ul>
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+      <!-- Topbar -->
+      <nav th:replace="~{layout/layout :: topbar}"></nav>
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800" th:text="${contenido}"></h1>
+        <div th:replace="~{layout/layout :: alerts}"></div>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Playeras Registradas</h6>
+            <a href="/playera/alta-playera" class="btn btn-primary btn-sm float-right">
+              <i class="fas fa-plus"></i> Agregar Playera
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable" >
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Color</th>
+                  <th>Talla</th>
+                  <th>Tipo Manga</th>
+                  <th>Precio Real</th>
+                  <th>Stock</th>
+                  <th>Precio Venta</th>
+                  <th>Marca</th>
+                  <th>Equipo</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="playera : ${playera}">
+                  <td th:text="${playera.idPlayera}"></td>
+                  <td th:text="${playera.color}"></td>
+                  <td th:text="${playera.talla}"></td>
+                  <td th:text="${playera.tipoManga}"></td>
+                  <td th:text="${playera.precioReal}"></td>
+                  <td th:text="${playera.stock}"></td>
+                  <td th:text="${playera.precioVenta}"></td>
+                  <td th:text="${playera.marca.nombre}"></td>
+                  <td th:text="${playera.equipo.nombre}"></td>
+                  <td>
+                    <a th:href="@{/playera/editar-playera/} + ${playera.idPlayera}" class="btn btn-warning btn-sm">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a th:href="@{/playera/eliminar-playera/} + ${playera.idPlayera}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Estás seguro de eliminar la playera?')">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.container-fluid -->
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/layout :: footer}"></footer>
+  </div>
+</div>
+
+<!-- Scripts -->
+<div th:replace="~{layout/layout :: scripts}"></div>
+</body>
+</html>

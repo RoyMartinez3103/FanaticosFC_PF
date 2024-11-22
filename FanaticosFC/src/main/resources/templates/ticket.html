@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}"></head>
+<body>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" th:replace="~{layout/layout :: sidebar}">
+    </ul>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" th:replace="~{layout/layout :: topbar}">
+            </nav>
+
+            <!-- Begin Page Content -->
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-6 col-lg-7 col-md-9">
+                        <div class="card shadow mb-4">
+                            <!-- Header del Ticket -->
+                            <div class="card-header py-3 text-center">
+                                <h6 class="m-0 font-weight-bold text-primary">TICKET DE VENTA</h6>
+                                <small class="text-muted">Fanáticos FC</small>
+                            </div>
+
+                            <!-- Contenido del Ticket -->
+                            <div class="card-body">
+                                <!-- Información de la Tienda -->
+                                <div class="text-center mb-4">
+                                    <i class="fas fa-store fa-2x mb-2 text-gray-300"></i>
+                                    <p class="mb-0">Sucursal Centro #123</p>
+                                    <p class="mb-0">Tel: (555) 123-4567</p>
+                                </div>
+
+                                <!-- Detalles de la Venta -->
+                                <div class="row mb-4">
+                                    <div class="col-6">
+                                        <p class="mb-0"><strong>Ticket:</strong> #<span th:text="${venta.idVenta}"></span></p>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <p class="mb-0"><strong>Cajero:</strong> <span th:text="${venta.usuario.username}"></span></p>
+                                    </div>
+                                </div>
+
+                                <!-- Productos -->
+                                <div class="table-responsive mb-4">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th class="text-center">Cant.</th>
+                                            <th class="text-right">Precio</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!-- Iteramos sobre las ventas únicas -->
+                                        <tr th:each="venta : ${ventasUnicas}">
+                                            <!-- Iteramos sobre los detalles que pertenecen a esta venta -->
+                                        <tr th:each="detalle : ${detallesVenta}"
+                                            th:if="${detalle.venta.idVenta == venta.idVenta}">
+                                            <td th:text="${detalle.playera.mostrarEnTicket}" class="mb-0" style="font-family: inherit; white-space: pre-wrap;"></td>
+                                            <td class="text-center" th:text="${detalle.cantidadPlayeras}"></td>
+                                            <td class="text-right" th:text="${'$' + #numbers.formatDecimal(detalle.playera.precioVenta, 1, 2)}"></td>
+                                            <td class="text-right" th:text="${'$' + #numbers.formatDecimal(detalle.playera.precioVenta*detalle.cantidadPlayeras, 1, 2)}"></td>
+                                        </tr>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Totales -->
+                                <div class="row justify-content-end mb-4">
+                                    <div class="col-md-6">
+                                        <div class="text-right">
+                                            <h4 class="text-primary"><strong>Total:</strong> <span th:text="${'$' + #numbers.formatDecimal(venta.montoTotal, 1, 2)}"></span></h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Forma de Pago -->
+                                <div class="alert alert-light text-center mb-4">
+                                    <p class="mb-0"><strong>Tipo de venta:</strong> <span th:text="${venta.ventaCredito ? 'A Crédito' : 'De Contado'}"> </span></p>
+                                </div>
+
+                                <!-- Pie del Ticket -->
+                                <div class="text-center">
+                                    <p class="mb-1">¡Gracias por su compra!</p>
+                                    <small class="text-muted">Este documento es un comprobante de venta</small>
+                                    <div class="mt-3">
+                                        <i class="fas fa-barcode fa-2x text-gray-300"></i>
+                                        <p class="mb-0"><small th:text="${venta.idVenta}"></small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Page Content -->
+        </div>
+        <!-- End Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white" th:replace="~{layout/layout :: footer}">
+        </footer>
+        <!-- End Footer -->
+    </div>
+    <!-- End Content Wrapper -->
+</div>
+<!-- End Wrapper -->
+
+<!-- Scripts -->
+<div th:replace="~{layout/layout :: scripts}"></div>
+</body>
+</html>

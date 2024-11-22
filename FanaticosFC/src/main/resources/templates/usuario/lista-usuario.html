@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/layout :: head}">
+</head>
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+  <!-- Sidebar -->
+  <ul th:replace="~{layout/layout :: sidebar}"></ul>
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+      <!-- Topbar -->
+      <nav th:replace="~{layout/layout :: topbar}"></nav>
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800" th:text="${contenido}"></h1>
+
+        <div th:replace="~{layout/layout :: alerts}"></div>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Usuarios Registrados</h6>
+            <a href="/usuario/alta-usuario" class="btn btn-primary btn-sm float-right">
+              <i class="fas fa-plus"></i> Agregar Usuario
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Apellido Paterno</th>
+                  <th>Apellido Materno</th>
+                  <th>Fecha de Nacimiento</th>
+                  <th>RFC</th>
+                  <th>Email</th>
+                  <th>Username</th>
+                  <th>Es administrador?</th>
+                  <th>Ventas Realizadas</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuario : ${usuario}">
+                  <td th:text="${usuario.idUsuario}"></td>
+                  <td th:text="${usuario.nombre}"></td>
+                  <td th:text="${usuario.apellidoPat}"></td>
+                  <td th:text="${usuario.apellidoMat}"></td>
+                  <td th:text="${usuario.fechaNac}"></td>
+                  <td th:text="${usuario.rfc}"></td>
+                  <td th:text="${usuario.mail}"></td>
+                  <td th:text="${usuario.username}"></td>
+                  <td th:text="${usuario.esAdmin ? 'Sí' : 'No'}"></td>
+                  <td th:text="${usuario.ventasRealizadas}"></td>
+
+
+                  <td>
+                    <a th:href="@{/usuario/editar-usuario/} + ${usuario.idUsuario}" class="btn btn-warning btn-sm">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a th:href="@{/usuario/eliminar-usuario/} + ${usuario.idUsuario}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Estás seguro de eliminar el usuario?')">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.container-fluid -->
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/layout :: footer}"></footer>
+  </div>
+</div>
+
+<!-- Scripts -->
+<div th:replace="~{layout/layout :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}"></head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <div th:replace="~{layout/layout :: sidebar}"></div>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <div th:replace="~{layout/layout :: topbar}"></div>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">
+                    <strong>Resumen de Playeras Seleccionadas</strong>
+                </h1>
+                <p class="mb-4">Confirma los datos antes de proceder con la venta.</p>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <!-- Tabla de Resumen -->
+                    <div class="col-lg-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Detalles de la Venta</h6>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/venta/salvar-venta}" method="post" th:object="${venta}">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Equipo</th>
+                                            <th>Marca</th>
+                                            <th>Color</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="selectedJerseysTable">
+                                        <!-- Las filas de playeras seleccionadas se generarán dinámicamente aquí -->
+                                        </tbody>
+                                    </table>
+<!--                                    <p><strong>Monto Total:</strong> $<span id="totalAmount">0.00</span></p>-->
+<!--                                    <input type="hidden" id="montoTotal" name="montoTotal"-->
+<!--                                            th:field="*{montoTotal}">-->
+                                    <div class="form-group col-md-6">
+                                        <p><strong>Monto Total:</strong> $<span id="totalAmount">0.00</span></p>
+                                        <input type="hidden" class="form-control" id="montoTotal" name="montoTotal"
+                                               th:field="*{montoTotal}" required>
+                                        <div class="text-danger" th:if="${#fields.hasErrors('montoTotal')}"
+                                             th:errors="*{montoTotal}"></div>
+                                    </div>
+
+                                    <div class="form-group text-right">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-check"></i> Confirmar Venta
+                                        </button>
+                                    </div>
+
+                                    <!-- Tipo de Venta -->
+<!--                                    <div class="form-group">-->
+<!--                                        <div class="custom-control custom-switch">-->
+<!--                                            <input type="checkbox"-->
+<!--                                                   class="custom-control-input"-->
+<!--                                                   id="ventaCredito"-->
+<!--                                                   name="ventaCredito">-->
+<!--                                            <label class="custom-control-label" for="ventaCredito">-->
+<!--                                                Venta a Crédito-->
+<!--                                            </label>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                    <div class="form-group col-lf-3">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="ventaCredito"
+                                                   th:field="*{ventaCredito}">
+                                            <label class="custom-control-label" for="ventaCredito">Venta a Crédito</label>
+                                        </div>
+                                        <div class="text-danger" th:if="${#fields.hasErrors('ventaCredito')}"
+                                             th:errors="*{ventaCredito}"></div>
+                                    </div>
+<!--                                    &lt;!&ndash; Formulario de Crédito &ndash;&gt;-->
+<!--                                    <div id="formCredito" class="d-none">-->
+<!--                                        <div class="card border-left-info shadow h-100 py-2 mb-4">-->
+<!--                                            <div class="card-body">-->
+<!--                                                <div class="form-group col-md-6">-->
+<!--                                                    <label for="nombre">Nombre*</label>-->
+<!--                                                    <input type="text" class="form-control" id="nombre" name="nombre"-->
+<!--                                                           th:field="*{nombre}" required>-->
+<!--                                                    <div class="text-danger" th:if="${#fields.hasErrors('nombre')}"-->
+<!--                                                         th:errors="*{nombre}"></div>-->
+<!--                                                </div>-->
+<!--                                                <div class="form-group">-->
+<!--                                                    <label for="telefono">Teléfono</label>-->
+<!--                                                    <input type="tel" class="form-control" id="telefono" name="telefono" pattern="[0-9]{10}">-->
+<!--                                                </div>-->
+<!--                                                <div class="form-group">-->
+<!--                                                    <label for="email">Correo Electrónico</label>-->
+<!--                                                    <input type="email" class="form-control" id="email" name="email">-->
+<!--                                                </div>-->
+<!--                                                <div class="form-group">-->
+<!--                                                    <label for="fechaLimite">Fecha Límite de Pago</label>-->
+<!--                                                    <input type="date" class="form-control" id="fechaLimite" name="fechaLimite">-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <div th:replace="~{layout/layout :: footer}"></div>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Scripts -->
+<div th:replace="~{layout/layout :: scripts}"></div>
+
+<!-- Specific Page Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ventaCreditoCheck = document.getElementById('ventaCredito');
+        const formCredito = document.getElementById('formCredito');
+        const nombreClienteInput = document.getElementById('nombreCliente');
+        const telefonoInput = document.getElementById('telefono');
+        const emailInput = document.getElementById('email');
+        const fechaLimiteInput = document.getElementById('fechaLimite');
+
+        // Mostrar/ocultar formulario de crédito
+        ventaCreditoCheck.addEventListener('change', function () {
+            formCredito.classList.toggle('d-none', !this.checked);
+
+            // Activar o desactivar campos requeridos
+            const camposCredito = [nombreClienteInput, telefonoInput, emailInput, fechaLimiteInput];
+            camposCredito.forEach(campo => {
+                campo.required = this.checked;
+            });
+        });
+
+        // Validaciones adicionales al enviar
+        document.getElementById('ventaForm').addEventListener('submit', function (e) {
+            if (ventaCreditoCheck.checked) {
+                if (!nombreClienteInput.value.trim()) {
+                    e.preventDefault();
+                    alert('Por favor ingrese el nombre del cliente para ventas a crédito.');
+                    nombreClienteInput.focus();
+                    return false;
+                }
+
+                if (fechaLimiteInput.value) {
+                    const fechaLimite = new Date(fechaLimiteInput.value);
+                    const fechaActual = new Date();
+
+                    if (fechaLimite <= fechaActual) {
+                        e.preventDefault();
+                        alert('La fecha límite debe ser posterior a la fecha actual.');
+                        fechaLimiteInput.focus();
+                        return false;
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script>
+    document.querySelector("form").addEventListener("submit", function (event) {
+        const totalAmount = document.getElementById("totalAmount").textContent.trim();
+        document.getElementById("montoTotal").value = parseFloat(totalAmount);
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Obtener las playeras seleccionadas del almacenamiento local
+        const selectedJerseys = JSON.parse(localStorage.getItem('selectedJerseys')) || [];
+        const tableBody = document.getElementById('selectedJerseysTable');
+        const totalAmountSpan = document.getElementById('totalAmount');
+        let totalAmount = 0;
+
+        // Generar filas para cada playera seleccionada
+        selectedJerseys.forEach(jersey => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${jersey.equipo}</td>
+                <td>${jersey.marca}</td>
+                <td>${jersey.color}</td>
+                <td>$${jersey.precio}</td>
+            `;
+            tableBody.appendChild(row);
+            totalAmount += parseFloat(jersey.precio);
+        });
+
+        // Mostrar el monto total
+        totalAmountSpan.textContent = totalAmount.toFixed(2);
+    });
+</script>
+
+</body>
+</html>

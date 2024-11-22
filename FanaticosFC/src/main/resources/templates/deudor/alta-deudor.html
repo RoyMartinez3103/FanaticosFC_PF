@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/layout :: head}"></head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div th:replace="~{layout/layout :: sidebar}"></div>
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+      <!-- Topbar -->
+      <div th:replace="~{layout/layout :: topbar}"></div>
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800"><strong><p th:text="${contenido}"></p></strong></h1>
+        <p class="mb-4"><p th:text="${subtitulo}"></p></p>
+
+        <!-- Form Card -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Datos del Deudor</h6>
+          </div>
+          <div class="card-body">
+            <form th:action="@{/deudor/salvar-deudor}" method="POST" th:object="${deudor}" enctype="multipart/form-data">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="nombre">Nombre*</label>
+                  <input type="text" class="form-control" id="nombre" name="nombre"
+                         th:field="*{nombre}" required>
+                  <div class="text-danger" th:if="${#fields.hasErrors('nombre')}"
+                       th:errors="*{nombre}"></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="apellidoPat">Apellido Paterno*</label>
+                  <input type="text" class="form-control" id="apellidoPat" name="apellidoPat"
+                         th:field="*{apellidoPat}" required>
+                  <div class="text-danger" th:if="${#fields.hasErrors('apellidoPat')}"
+                       th:errors="*{apellidoPat}"></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="apellidoMat">Apellido Materno*</label>
+                  <input type="text" class="form-control" id="apellidoMat" name="apellidoMat"
+                         th:field="*{apellidoMat}" required>
+                  <div class="text-danger" th:if="${#fields.hasErrors('apellidoMat')}"
+                       th:errors="*{apellidoMat}"></div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="telefono">Teléfono*</label>
+                  <input type="number" class="form-control" id="telefono" name="telefono"
+                         th:field="*{telefono}" required>
+                  <div class="text-danger" th:if="${#fields.hasErrors('telefono')}"
+                       th:errors="*{telefono}"></div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="mail">Correo Electrónico*</label>
+                  <input type="email" class="form-control" id="mail" name="mail"
+                         th:field="*{mail}" required>
+                  <div class="text-danger" th:if="${#fields.hasErrors('apellidoMat')}"
+                       th:errors="*{mail}"></div>
+                </div>
+              </div>
+              <div class="text-right">
+                <a th:href="@{/deudor/lista-deudor}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar Deudor</button>
+              </div>
+              <input type="hidden" name="idDeudor" th:value="${deudor.idDeudor}"/>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <div th:replace="~{layout/layout :: footer}"></div>
+  </div>
+  <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Fragment con los scripts -->
+<div th:replace="~{layout/layout :: scripts}"></div>
+
+</body>
+</html>

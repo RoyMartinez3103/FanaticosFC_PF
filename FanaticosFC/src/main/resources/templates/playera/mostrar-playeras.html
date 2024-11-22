@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" th:href="@{/css/cards.css}">
+</head>
+
+<body>
+<form id="jerseyForm" th:action="@{/venta/alta-venta}" >
+  <div class="grid-container">
+    <div class="jersey-card" th:each="jersey : ${jerseys}">
+      <div class="checkbox-container">
+        <input type="checkbox"
+               th:value="${jersey.idPlayera}"
+               name="selectedJerseys"
+               class="custom-checkbox"
+               th:data-precio="${jersey.precioVenta}">
+      </div>
+      <div class="img-container">
+        <img class="img-playera"
+             th:src="@{'/img/playeras/' + ${jersey.idPlayera} + '.webp'}"
+             th:alt="${jersey.equipo.nombre}">
+      </div>
+      <div class="separator"></div>
+      <div class="jersey-info">
+        <p class="marca" th:text="${jersey.marca.nombre}"></p>
+        <h3 class="equipo" th:text="${jersey.equipo.nombre}"></h3>
+        <p class="color" th:text="${jersey.color}"></p>
+        <p class="precioVenta" th:text="${'$' + jersey.precioVenta}"></p>
+      </div>
+    </div>
+  </div>
+  <button type="submit" id="processButton" class="process-button">
+    Registrar Venta (<span id="selectedCount">0</span>)
+  </button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('jerseyForm');
+      const checkboxes = document.querySelectorAll('.custom-checkbox');
+      const processButton = document.getElementById('processButton');
+      const selectedCountSpan = document.getElementById('selectedCount');
+
+      function updateSelection() {
+          const selectedCount = document.querySelectorAll('.custom-checkbox:checked').length;
+          selectedCountSpan.textContent = selectedCount;
+          processButton.style.display = selectedCount > 0 ? 'block' : 'none';
+
+          // Actualizar visual de las cards seleccionadas
+          checkboxes.forEach(checkbox => {
+              const card = checkbox.closest('.jersey-card');
+              if (checkbox.checked) {
+                  card.classList.add('selected');
+              } else {
+                  card.classList.remove('selected');
+              }
+          });
+      }
+
+      // Evento para los checkboxes
+      checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', updateSelection);
+      });
+
+      // Evento para el formulario
+      form.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const selectedJerseys = Array.from(checkboxes)
+              .filter(cb => cb.checked)
+              .map(cb => ({
+                  id: cb.value,
+                  equipo: cb.closest('.jersey-card').querySelector('.equipo').textContent,
+                  marca: cb.closest('.jersey-card').querySelector('.marca').textContent,
+                  color: cb.closest('.jersey-card').querySelector('.color').textContent,
+                  precio: cb.dataset.precio
+              }));
+
+          if (selectedJerseys.length === 0) {
+              alert('Por favor selecciona al menos un jersey');
+              return;
+          }
+
+          // Guardar las playeras seleccionadas en localStorage
+          localStorage.setItem('selectedJerseys', JSON.stringify(selectedJerseys));
+
+          // Enviar el formulario
+          this.submit();
+      });
+  });
+</script>
+</body>
+</html>
