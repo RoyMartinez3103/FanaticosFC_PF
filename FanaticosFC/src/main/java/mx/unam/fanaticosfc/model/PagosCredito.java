@@ -7,10 +7,11 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "pagos_Credito")
+@Table(name = "pago_credito")
 public class PagosCredito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idPago")
     private Integer id_pago;
     @Column(name = "fecha_pago")
     private Date fechaPago;
