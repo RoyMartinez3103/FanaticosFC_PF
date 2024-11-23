@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -15,9 +16,10 @@ public class Venta {
     @Column(name = "monto_total")
     private Double montoTotal;
     @Column(name = "fecha_venta")
-    private LocalDate fechaVenta;
+    private LocalDateTime fechaVenta;
+
     @Column(name = "es_venta_credito")
-    private Boolean ventaCredito;
+    private Boolean ventaCredito=false;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario")
@@ -30,7 +32,7 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(Double montoTotal, LocalDate fechaVenta, Boolean ventaCredito, Usuario usuario, EstatusVenta estatusVenta) {
+    public Venta(Double montoTotal, LocalDateTime fechaVenta, Boolean ventaCredito, Usuario usuario, EstatusVenta estatusVenta) {
         this.montoTotal = montoTotal;
         this.fechaVenta = fechaVenta;
         this.ventaCredito = ventaCredito;

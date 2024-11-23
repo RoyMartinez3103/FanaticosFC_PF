@@ -9,7 +9,8 @@ import lombok.Data;
 public class VentaCredito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_venta_credito;
+    @Column(name = "id_venta_credito")
+    private Integer idVentaCredito;
     private Integer plazo;
 
     @OneToOne
@@ -32,7 +33,7 @@ public class VentaCredito {
     @Override
     public String toString() {
         return "VentaCredito{" +
-                "id_venta_credito=" + id_venta_credito +
+                "id_venta_credito=" + idVentaCredito +
                 ", plazo=" + plazo +
                 ", venta=" + venta +
                 ", deudor=" + deudor +
