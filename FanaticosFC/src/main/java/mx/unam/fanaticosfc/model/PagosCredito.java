@@ -1,9 +1,12 @@
 package mx.unam.fanaticosfc.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import lombok.Data;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -11,14 +14,15 @@ import java.util.Date;
 public class PagosCredito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idPago")
-    private Integer id_pago;
+    @Column(name = "id_pago")
+    private Integer idPago;
     @Column(name = "fecha_pago")
-    private Date fechaPago;
+    private LocalDateTime fechaPago;
+
+    @Digits(integer = 4,fraction = 2,message = "Valor incorrecto, se esparaba [4].[2] dígitos.")
+    @DecimalMin(value = "0.0",inclusive = false, message = "El monto debe ser mayor a cero")
     @Column(name = "monto_pago")
-    private Double monto;
-    @Column(name = "monto_restante")
-    private double montoRestante;
+    private BigDecimal monto;
 
     @ManyToOne
     @JoinColumn(name = "id_venta_credito")
@@ -27,21 +31,10 @@ public class PagosCredito {
     public PagosCredito() {
     }
 
-    public PagosCredito(Date fechaPago, Double monto, double montoRestante, VentaCredito ventaCredito) {
+    public PagosCredito(LocalDateTime fechaPago, BigDecimal monto, VentaCredito ventaCredito) {
         this.fechaPago = fechaPago;
         this.monto = monto;
-        this.montoRestante = montoRestante;
         this.ventaCredito = ventaCredito;
     }
 
-    @Override
-    public String toString() {
-        return "PagosCredito{" +
-                "id_pago=" + id_pago +
-                ", fechaPago=" + fechaPago +
-                ", monto=" + monto +
-                ", montoRestante=" + montoRestante +
-                ", ventaCredito=" + ventaCredito +
-                '}';
-    }
 }

@@ -48,7 +48,6 @@ public class EquipoController {
         }
 
         equipoService.guardar(equipo);
-        System.out.println(equipo);
         flash.addFlashAttribute("success", "El equipo se guardó correctamente");
 
         return "redirect:/equipo/lista-equipo";

@@ -47,7 +47,7 @@ public class Playera {
     private String tipoManga;
 
     @Digits(integer = 4,fraction = 2,message = "Valor incorrecto, se esparaba [4].[2] dígitos.")
-    @DecimalMin(value = "0.0",inclusive = false)
+    @DecimalMin(value = "0.00",inclusive = false)
     @Column(name = "precio_real")
     private BigDecimal precioReal;
 

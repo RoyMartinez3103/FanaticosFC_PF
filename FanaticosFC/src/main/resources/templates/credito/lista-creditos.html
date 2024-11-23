@@ -29,6 +29,9 @@
         <div class="card shadow mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Ventas a crédito registradas</h6>
+            <a th:href="@{/venta/lista-venta}" class="btn btn-primary btn-sm float-right">
+              Lista de Ventas
+            </a>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -36,25 +39,29 @@
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Plazo</th>
+                  <th>Pagos Realizados</th>
                   <th>Deudor</th>
                   <th>Venta ID</th>
                   <th>Monto Total</th>
-                  <th>Monto por pago</th>
+                  <th>Monto Restante</th>
                   <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="credito : ${credito}">
                   <td th:text="${credito.idVentaCredito}"></td>
-                  <td th:text="${credito.plazo}"></td>
+                  <td th:text="${credito.pagosRealizados}"></td>
                   <td th:text="${credito.deudor.nombre + ' ' + credito.deudor.apellidoPat}"></td>
                   <td th:text="${credito.venta.idVenta}"></td>
                   <td th:text="${credito.venta.montoTotal}"></td>
-                  <td th:text="${#numbers.formatDecimal(credito.venta.montoTotal / credito.plazo, 1, 2)}"></td>
+                  <td th:text="${credito.montoRestante}"></td>
                   <td>
                     <a th:href="@{/detalleVenta/ticket/} + ${credito.venta.idVenta}" class="btn btn-info btn-sm">
                       <i class="fas fa-receipt"></i> Ver Detalles
+                    </a>
+
+                    <a th:href="@{/pagos/form-pago/} + ${credito.idVentaCredito}" class="btn btn-success btn-sm">
+                      <i class="fas fa-hand-holding-usd"></i> Registrar pago
                     </a>
                   </td>
                 </tr>

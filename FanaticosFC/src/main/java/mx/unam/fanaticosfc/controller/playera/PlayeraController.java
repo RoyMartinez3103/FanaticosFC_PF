@@ -7,12 +7,8 @@ import mx.unam.fanaticosfc.model.Playera;
 import mx.unam.fanaticosfc.service.equipo.EquipoServiceImpl;
 import mx.unam.fanaticosfc.service.marca.MarcaServiceImpl;
 import mx.unam.fanaticosfc.service.playera.PlayeraServiceImpl;
-import mx.unam.fanaticosfc.util.RenderPagina;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,8 +39,8 @@ public class PlayeraController {
     @GetMapping("/alta-playera")
     public String altaPlayera(Model model){
         Playera playera = new Playera();
-        List<Equipo> equipos = equipoService.mostrar();
-        List<Marca> marcas = marcaService.mostrar();
+        List<Equipo> equipos = equipoService.listarTodos();
+        List<Marca> marcas = marcaService.listarTodos();
 
         model.addAttribute("equipo",equipos);
         model.addAttribute("marca",marcas);
@@ -58,8 +54,8 @@ public class PlayeraController {
                               BindingResult result,
                               Model model,
                               RedirectAttributes flash) {
-        List<Equipo> equipos = equipoService.mostrar();
-        List<Marca> marcas = marcaService.mostrar();
+        List<Equipo> equipos = equipoService.listarTodos();
+        List<Marca> marcas = marcaService.listarTodos();
 
         model.addAttribute("equipo",equipos);
         model.addAttribute("marca",marcas);
@@ -95,8 +91,8 @@ public class PlayeraController {
     @GetMapping("/editar-playera/{id}")
     public String modificarPlayera(@PathVariable Integer id, Model model){
         Playera playera = playeraService.buscarPorId(id);
-        List<Equipo> equipos = equipoService.mostrar();
-        List<Marca> marcas = marcaService.mostrar();
+        List<Equipo> equipos = equipoService.listarTodos();
+        List<Marca> marcas = marcaService.listarTodos();
 
         model.addAttribute("equipo",equipos);
         model.addAttribute("marca",marcas);

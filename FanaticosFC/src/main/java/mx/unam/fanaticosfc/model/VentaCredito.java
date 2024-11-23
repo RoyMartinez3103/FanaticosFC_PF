@@ -1,7 +1,10 @@
 package mx.unam.fanaticosfc.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -11,7 +14,13 @@ public class VentaCredito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_venta_credito")
     private Integer idVentaCredito;
-    private Integer plazo;
+
+    @DecimalMin(value = "0.0",inclusive = false, message = "El monto debe ser menor a cero")
+    @Column(name = "monto_restante")
+    private BigDecimal montoRestante;
+
+    @Column(name = "pagos_realizados")
+    private Integer pagosRealizados;
 
     @OneToOne
     @JoinColumn(name="id_venta")
@@ -24,19 +33,10 @@ public class VentaCredito {
     public VentaCredito() {
     }
 
-    public VentaCredito(Integer plazo, Venta venta, Deudor deudor) {
-        this.plazo = plazo;
+    public VentaCredito(BigDecimal montoRestante, Integer pagosRealizados, Venta venta, Deudor deudor) {
+        this.montoRestante = montoRestante;
+        this.pagosRealizados = pagosRealizados;
         this.venta = venta;
         this.deudor = deudor;
-    }
-
-    @Override
-    public String toString() {
-        return "VentaCredito{" +
-                "id_venta_credito=" + idVentaCredito +
-                ", plazo=" + plazo +
-                ", venta=" + venta +
-                ", deudor=" + deudor +
-                '}';
     }
 }

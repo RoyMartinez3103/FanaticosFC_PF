@@ -28,7 +28,10 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Ventas Realizadas</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Pagos Registrados</h6>
+            <a th:href="@{/ventaCredito/lista-creditos}" class="btn btn-primary btn-sm float-right">
+              Lista de Ventas a Crédito
+            </a>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -36,35 +39,21 @@
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Fecha</th>
-                  <th>Monto Total</th>
-                  <th>¿Es venta a crédito?</th>
-                  <th>Usuario</th>
-                  <th>Estatus</th>
-                  <th>Acciones</th>
+                  <th>Fecha de Pago</th>
+                  <th>Monto de Pago</th>
+                  <th>Cliente</th>
+                  <th>Venta Crédito ID</th>
+
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="venta : ${venta}">
-                  <td th:text="${venta.idVenta}"></td>
-                  <td th:text="${venta.fechaVenta}"></td>
-                  <td th:text="${venta.montoTotal}"></td>
-                  <td th:text="${venta.ventaCredito ? 'Sí' : 'No'}"></td>
-                  <td th:text="${venta.usuario.username}"></td>
-                  <td th:text="${venta.estatusVenta.estatus}"></td>
-                  <td>
-                    <a th:href="@{/detalleVenta/ticket/} + ${venta.idVenta}" class="btn btn-info btn-sm">
-                      <i class="fas fa-receipt"></i> Ver Ticket
-                    </a>
-                    <form th:action="@{/venta/cancelar-venta/} + ${venta.idVenta}"
-                          method="post"
-                          style="display: inline;"
-                          onsubmit="return confirm('¿Estás seguro de que deseas cancelar esta venta?');">
-                      <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fas fa-times"></i> Cancelar
-                      </button>
-                    </form>
-                  </td>
+                <tr th:each="pago : ${pago}">
+                  <td th:text="${pago.idPago}"></td>
+                  <td th:text="${pago.fechaPago}"></td>
+                  <td th:text="${pago.monto}"></td>
+                  <td th:text="${pago.ventaCredito.deudor.nombre + ' ' + pago.ventaCredito.deudor.apellidoPat}"></td>
+                  <td th:text="${pago.ventaCredito.idVentaCredito}"></td>
+
                 </tr>
                 </tbody>
               </table>

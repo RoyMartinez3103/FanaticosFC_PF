@@ -3,6 +3,7 @@ package mx.unam.fanaticosfc.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ public class Venta {
     @Column(name = "id_venta")
     private Integer idVenta;
     @Column(name = "monto_total")
-    private Double montoTotal;
+    private BigDecimal montoTotal;
     @Column(name = "fecha_venta")
     private LocalDateTime fechaVenta;
 
@@ -32,7 +33,7 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(Double montoTotal, LocalDateTime fechaVenta, Boolean ventaCredito, Usuario usuario, EstatusVenta estatusVenta) {
+    public Venta(BigDecimal montoTotal, LocalDateTime fechaVenta, Boolean ventaCredito, Usuario usuario, EstatusVenta estatusVenta) {
         this.montoTotal = montoTotal;
         this.fechaVenta = fechaVenta;
         this.ventaCredito = ventaCredito;
