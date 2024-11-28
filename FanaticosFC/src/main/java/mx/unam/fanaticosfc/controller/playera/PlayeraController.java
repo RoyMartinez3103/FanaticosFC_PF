@@ -104,7 +104,7 @@ public class PlayeraController {
 
     @GetMapping("/mostrar-playeras")
     public String mostrarPlayeras(Model model){
-        List<Playera> playeras = playeraService.mostrar();
+        List<Playera> playeras = playeraService.listarTodos();
         // Crear un Set para almacenar combinaciones únicas de color e idEquipo
         Set<String> uniqueJerseys = new HashSet<>();
 

@@ -11,6 +11,7 @@ public class DetalleVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_detalle_venta")
     private Integer idDetalleVenta;
+
     @Column(name ="cantidad_playeras")
     private Integer cantidadPlayeras;
 

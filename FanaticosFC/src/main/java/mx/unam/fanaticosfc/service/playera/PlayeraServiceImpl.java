@@ -43,8 +43,8 @@ public class PlayeraServiceImpl implements GenericService<Playera,Integer> {
         playeraRepository.deleteById(id);
     }
 
-    public List<Playera> mostrar() {
-        return playeraRepository.findAll();
+    public Playera findAllById(Iterable<Integer> playeras){
+     return (Playera) playeraRepository.findAllById(playeras);
     }
 
 }

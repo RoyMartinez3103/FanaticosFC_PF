@@ -1,11 +1,9 @@
 package mx.unam.fanaticosfc.service.venta;
 
-import mx.unam.fanaticosfc.model.Deudor;
-import mx.unam.fanaticosfc.model.EstatusVenta;
-import mx.unam.fanaticosfc.model.Venta;
-import mx.unam.fanaticosfc.model.VentaCredito;
+import mx.unam.fanaticosfc.model.*;
 import mx.unam.fanaticosfc.repository.*;
 import mx.unam.fanaticosfc.service.GenericService;
+import mx.unam.fanaticosfc.service.usuario.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +27,7 @@ public class VentaServiceImpl implements GenericService<Venta,Integer> {
     @Autowired
     private EstatusVentaRepository estatusRepository;
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioServiceImpl usuarioService;
 
     @Override
     @Transactional(readOnly = true)
@@ -47,7 +45,12 @@ public class VentaServiceImpl implements GenericService<Venta,Integer> {
     @Override
     @Transactional
     public void guardar(Venta venta) {
-        venta.setUsuario(usuarioRepository.findByIdUsuario(1));
+        Usuario usuario = (usuarioService.buscarPorId(2));
+
+        venta.setUsuario(usuario);
+        usuario.setVentasRealizadas(usuario.getVentasRealizadas()+1);
+
+
         venta.setMontoTotal(venta.getMontoTotal());
         System.out.println("monto "+venta.getMontoTotal());
         venta.setFechaVenta(LocalDateTime.now());
@@ -57,20 +60,6 @@ public class VentaServiceImpl implements GenericService<Venta,Integer> {
         }else
             venta.setEstatusVenta(estatusRepository.findByIdEstatusVenta(1));
         System.out.println("Credito "+venta.getVentaCredito());
-        ventaRepository.save(venta);
-    }
-
-
-    @Transactional
-    public void guardarVenta(Venta venta) {
-        Venta ventaNueva = new Venta();
-        ventaNueva.setMontoTotal(venta.getMontoTotal());
-        ventaNueva.setFechaVenta(LocalDateTime.now());
-
-        if(venta.getVentaCredito()){
-            ventaNueva.setEstatusVenta(estatusRepository.findByIdEstatusVenta(2));
-        }else
-            ventaNueva.setEstatusVenta(estatusRepository.findByIdEstatusVenta(1));
         ventaRepository.save(venta);
     }
 
