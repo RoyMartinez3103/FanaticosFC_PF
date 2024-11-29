@@ -1,15 +1,11 @@
 package mx.unam.fanaticosfc.repository;
 
-import jakarta.persistence.NamedNativeQuery;
 import mx.unam.fanaticosfc.model.Venta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.math.BigDecimal;
 import java.util.List;
-
-
 
 public interface VentaRepository extends JpaRepository<Venta,Integer> {
     @Query("SELECT u.nombre, COUNT(v.usuario.idUsuario) " +
@@ -28,5 +24,19 @@ public interface VentaRepository extends JpaRepository<Venta,Integer> {
             "FROM Venta " +
             "WHERE YEAR(fechaVenta) = YEAR(CURDATE()) AND MONTH(fechaVenta) = MONTH(CURDATE()) " +
             "GROUP BY MONTH(fechaVenta)")
-    String gananciaMes();
+    BigDecimal gananciaMes();
+
+    @Query(value = "SELECT u.nombre, u.apellido_pat, COUNT(v.ID_USUARIO) as ventas " +
+            "FROM venta v " +
+            "JOIN usuario u ON v.ID_USUARIO=u.ID_USUARIO " +
+            "GROUP BY u.nombre " +
+            "ORDER BY ventas DESC LIMIT 1",nativeQuery = true)
+    List<Object[]> getEmpleadoDelMes();
+
+    @Query("SELECT COUNT(*) " +
+            "FROM Venta " +
+            "WHERE MONTH(fechaVenta) = MONTH(CURDATE())")
+    Integer ventasMes();
+
+
 }

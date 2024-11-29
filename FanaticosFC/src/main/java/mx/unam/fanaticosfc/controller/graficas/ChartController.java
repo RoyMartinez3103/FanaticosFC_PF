@@ -1,5 +1,6 @@
 package mx.unam.fanaticosfc.controller.graficas;
 
+import mx.unam.fanaticosfc.repository.DetalleVentaRepository;
 import mx.unam.fanaticosfc.repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -18,11 +20,12 @@ import java.util.List;
 public class ChartController {
     @Autowired
     VentaRepository ventaRepository;
+    @Autowired
+    DetalleVentaRepository detalleRepository;
 
-    @GetMapping("/ventas-por-usuario")
+    @GetMapping
     public String getVentasPorUsuario(@RequestParam(defaultValue = "2024") Integer anio,Model model){
         List<Object[]> usuarioVentas = ventaRepository.getUsuariosMasVentas();
-        System.out.println("Cantidad de registros: " + usuarioVentas.size());
 
         List<String> nombres = new ArrayList<>();
         List<Long> ventas = new ArrayList<>();
@@ -31,9 +34,6 @@ public class ChartController {
             nombres.add((String) usuarioVenta[0]);
             ventas.add((Long) usuarioVenta[1]);
         }
-
-        System.out.println("Nombres: " + nombres);
-        System.out.println("Ventas: " + ventas);
 
         model.addAttribute("contenido","Gráficas");
         model.addAttribute("nombres",nombres);
@@ -55,18 +55,42 @@ public class ChartController {
             ganancias.add(total);
         }
 
-        System.out.println("Meses: " + meses);
-        System.out.println("Ventas: " + ganancias);
-
         model.addAttribute("meses",meses);
         model.addAttribute("ganancias",ganancias);
 
         // GRAFICA DE DONA //
 
         // TARJETAS //
-        String gananciaMes = ventaRepository.gananciaMes().toString();
+        BigDecimal gananciaMes = ventaRepository.gananciaMes();
         model.addAttribute("gananciaMes",gananciaMes);
 
+        Integer ventasMes = ventaRepository.ventasMes();
+        model.addAttribute("ventasMes",ventasMes);
+
+        List<Object[]> playeraMasVendida = detalleRepository.getPlayeraMasVendida();
+
+        Object[] fila = playeraMasVendida.get(0);
+            String equipo = (String) fila[0];
+            String color = (String) fila[1];
+            BigDecimal cantidad = (BigDecimal) fila[2];
+
+        model.addAttribute("equipo",equipo);
+        model.addAttribute("color",color);
+        model.addAttribute("cantidad",cantidad);
+
+        List<Object[]> empleadoMes = ventaRepository.getEmpleadoDelMes();
+        Object[] empleado = empleadoMes.get(0);
+        String nombre = (String) empleado[0];
+        String paterno = (String) empleado[1];
+        Long ventasReal = (Long) empleado[2];
+
+        System.out.println(nombre);
+        System.out.println(paterno);
+        System.out.println(ventasReal);
+
+        model.addAttribute("nombre",nombre);
+        model.addAttribute("paterno",paterno);
+        model.addAttribute("ventasReal",ventasReal);
 
 
 
