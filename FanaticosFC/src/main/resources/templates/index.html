@@ -22,113 +22,14 @@
       <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="d-flex justify-content-center align-items-center w-100" style="bold">Viste como un campeón</h1>
 
-        <!-- Carousel Container -->
-        <div class="container mt-4">
-          <div id="imageCarousel" class="carousel slide" data-ride="carousel">
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-              <li data-target="#imageCarousel" data-slide-to="0" class="active"></li>
-              <li data-target="#imageCarousel" data-slide-to="1"></li>
-              <li data-target="#imageCarousel" data-slide-to="2"></li>
-            </ol>
+        <h1 class="title-glow text-center text-primary">Viste como un campeón</h1>
+        <h2 class="title-wave text-center">Viste como un campeón</h2>
 
-            <!-- Slides -->
-            <div class="carousel-inner">
-              <!-- First Slide -->
-              <div class="carousel-item active">
-                <div class="card">
-                  <img th:src="@{/img/fondo.webp}" class="card-img-top carousel-image" alt="Imagen 1">
-                  <div class="card-body">
-                  </div>
-                </div>
-              </div>
-
-              <!-- Second Slide -->
-              <div class="carousel-item">
-                <div class="card">
-                  <img th:src="@{/img/fondo4.jpg}" class="card-img-top carousel-image" alt="Imagen 2">
-                  <div class="card-body">
-                  </div>
-                </div>
-              </div>
-
-              <!-- Third Slide -->
-              <div class="carousel-item">
-                <div class="card">
-                  <img th:src="@{/img/fondo3.avif}" class="card-img-top carousel-image" alt="Imagen 3">
-                  <div class="card-body">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Controls -->
-            <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Anterior</span>
-            </a>
-            <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Siguiente</span>
-            </a>
-          </div>
+        <div class="text-center mb-4">
+          <img th:src="@{/img/LogoFANATICOS2.png}" alt="LogoFFCT" class="mb-0" style="max-width: 500px; display: block; margin: 0 auto;">
         </div>
 
-        <!-- Add this CSS to your stylesheet -->
-        <style>
-          .carousel-item {
-              padding: 20px;
-          }
-
-          .carousel-image {
-              height: 500px;
-              weight: 300px;
-          }
-
-          .carousel-control-prev,
-          .carousel-control-next {
-              width: 5%;
-              background-color: rgba(0,0,0,0.2);
-          }
-
-          .carousel-indicators {
-              bottom: -40px;
-          }
-
-          .carousel-indicators li {
-              background-color: #666;
-          }
-
-          .card {
-              box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-              transition: transform 0.2s ease;
-          }
-
-          .card:hover {
-              transform: translateY(-5px);
-          }
-        </style>
-
-        <!-- Add this JavaScript after your other scripts -->
-        <script>
-          $(document).ready(function(){
-              // Initialize the carousel with custom settings
-              $('#imageCarousel').carousel({
-                  interval: 2000,  // Time between automatic slides (in milliseconds)
-                  pause: "hover", // Pause on mouse hover
-                  wrap: true      // Continue from last to first slide
-              });
-          });
-        </script>
-
-
-        <!--p class="mb-4">Formulario para registrar una nueva marca en el sistema.</p-->
-
-        <!-- Form Card -->
-
-      </div>
       <!-- /.container-fluid -->
     </div>
     <!-- End of Main Content -->

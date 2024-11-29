@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -35,7 +33,7 @@ public class ChartController {
             ventas.add((Long) usuarioVenta[1]);
         }
 
-        model.addAttribute("contenido","Gráficas");
+        model.addAttribute("contenido","Estadísticas");
         model.addAttribute("nombres",nombres);
         model.addAttribute("montos",ventas);
 
@@ -59,6 +57,21 @@ public class ChartController {
         model.addAttribute("ganancias",ganancias);
 
         // GRAFICA DE DONA //
+
+        List<Object[]> tallasVendidas = detalleRepository.getTallasVendidas();
+        List<String> tallas = new ArrayList<>();
+        List<BigDecimal> tvendidas = new ArrayList<>();
+
+        for(Object[] objs : tallasVendidas){
+            String talla = (String) objs[0];
+            BigDecimal cant = (BigDecimal) objs[1];
+
+            tallas.add(talla);
+            tvendidas.add(cant);
+        }
+
+        model.addAttribute("tallas",tallas);
+        model.addAttribute("tvendidas",tvendidas);
 
         // TARJETAS //
         BigDecimal gananciaMes = ventaRepository.gananciaMes();
@@ -84,15 +97,9 @@ public class ChartController {
         String paterno = (String) empleado[1];
         Long ventasReal = (Long) empleado[2];
 
-        System.out.println(nombre);
-        System.out.println(paterno);
-        System.out.println(ventasReal);
-
         model.addAttribute("nombre",nombre);
         model.addAttribute("paterno",paterno);
         model.addAttribute("ventasReal",ventasReal);
-
-
 
         return "/graficas/charts";
     }

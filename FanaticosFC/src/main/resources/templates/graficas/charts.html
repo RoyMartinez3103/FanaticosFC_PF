@@ -143,15 +143,14 @@
                     <div class="col-xl-4 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Gráfico de Donut</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Tallas más vendidas</h6>
                             </div>
                             <div class="card-body">
                                 <div class="chart-pie pt-4">
                                     <canvas id="myPieChart"></canvas>
                                 </div>
-                                <hr>
-                                El estilo del gráfico de donut se encuentra en
-                                <code>/js/demo/chart-pie-demo.js</code>.
+                                <<hr style="margin-top: 70px;">
+                                <p style="margin-top: 10px;">Se muestran las tallas más vendidas.</p>
                             </div>
                         </div>
                     </div>
@@ -177,6 +176,13 @@
 <script th:src="@{/vendor/chart.js/Chart.min.js}"></script>
 
 <!-- Page level custom scripts -->
+<script th:inline="javascript">
+    const tallas = /*[[${tallas}]]*/ [];
+    const tvendidas = /*[[${tvendidas}]]*/ [];
+
+    console.log("Tallas:", tallas);
+    console.log("tvendidas:", tvendidas);
+</script>
 
 <script th:src="@{/js/demo/chart-pie-demo.js}"></script>
 
@@ -194,8 +200,6 @@
     console.log("Montos:", ganancias);
 </script>
 <script th:src="@{/js/demo/chart-area-demo.js}"></script>
-
-
 
 <div th:replace="~{layout/layout :: scripts}"></div>
 

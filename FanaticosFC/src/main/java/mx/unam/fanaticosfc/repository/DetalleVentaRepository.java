@@ -15,4 +15,10 @@ public interface DetalleVentaRepository extends JpaRepository<DetalleVenta,Integ
             "GROUP BY d.ID_PLAYERA " +
             "ORDER BY TOTAL_VENDIDAS DESC LIMIT 1",nativeQuery = true)
     List<Object[]> getPlayeraMasVendida();
+
+    @Query(value = "SELECT p.talla, SUM(d.CANTIDAD_PLAYERAS) AS TOTAL_VENDIDAS " +
+            "FROM detalle_venta d " +
+            "JOIN playera p ON d.id_playera=p.id_playera " +
+            "GROUP BY p.talla ORDER BY TOTAL_VENDIDAS DESC",nativeQuery = true)
+    List<Object[]> getTallasVendidas();
 }
