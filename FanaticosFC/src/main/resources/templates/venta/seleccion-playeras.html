@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout/layout :: head}"></head>
+<link rel="stylesheet" th:href="@{/css/cards.css}">
+
+<body>
+
+<form th:action="@{/venta/seleccionar-tipo}" method="post">
+  <div th:if="${error}" class="alert alert-danger text-center">
+    <p th:text="${error}"></p>
+  </div>
+
+  <div class="grid-container">
+    <div class="jersey-card" th:each="jersey : ${jerseys}">
+      <div class="checkbox-container">
+        <input type="checkbox"
+               th:value="${jersey.idPlayera}"
+               name="selectedJerseys"
+               class="custom-checkbox"
+                value="">
+      </div>
+      <div class="img-container">
+        <img class="img-playera"
+             th:src="@{'/img/playeras/' + ${jersey.idPlayera} + '.webp'}"
+             th:alt="${jersey.equipo.nombre}">
+      </div>
+      <div class="separator"></div>
+      <div class="jersey-info">
+        <p class="marca" th:text="${jersey.marca.nombre}"></p>
+        <h3 class="equipo" th:text="${jersey.equipo.nombre}"></h3>
+        <p class="color" th:text="${jersey.color}"></p>
+        <p class="precioVenta" th:text="${'$' + jersey.precioVenta}"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor para los botones -->
+  <div class="container mt-5">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary text-center">Selecciona el Tipo de Venta</h6>
+      </div>
+      <div class="card-body text-center">
+        <button type="submit" name="tipo" value="contado" class="btn btn-primary btn-lg m-2">
+          <i class="fas fa-money-bill-wave"></i> Venta de Contado
+        </button>
+        <button type="submit" name="tipo" value="credito" class="btn btn-secondary btn-lg m-2">
+          <i class="fas fa-credit-card"></i> Venta a Crédito
+        </button>
+
+      </div>
+    </div>
+  </div>
+</form>
+</body>
+</html>

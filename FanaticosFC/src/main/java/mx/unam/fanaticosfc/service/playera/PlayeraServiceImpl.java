@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -45,6 +46,10 @@ public class PlayeraServiceImpl implements GenericService<Playera,Integer> {
 
     public Playera findAllById(Iterable<Integer> playeras){
      return (Playera) playeraRepository.findAllById(playeras);
+    }
+
+    public List<Map<String,Object>> obtenerTallas(Integer idEquipo){
+        return playeraRepository.findTallasByEquipoId(idEquipo);
     }
 
 }

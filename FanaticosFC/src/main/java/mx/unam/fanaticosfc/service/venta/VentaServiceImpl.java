@@ -50,16 +50,10 @@ public class VentaServiceImpl implements GenericService<Venta,Integer> {
         venta.setUsuario(usuario);
         usuario.setVentasRealizadas(usuario.getVentasRealizadas()+1);
 
-
-        venta.setMontoTotal(venta.getMontoTotal());
-        System.out.println("monto "+venta.getMontoTotal());
-        venta.setFechaVenta(LocalDateTime.now());
-
         if(venta.getVentaCredito()){
             venta.setEstatusVenta(estatusRepository.findByIdEstatusVenta(2));
         }else
             venta.setEstatusVenta(estatusRepository.findByIdEstatusVenta(1));
-        System.out.println("Credito "+venta.getVentaCredito());
         ventaRepository.save(venta);
     }
 

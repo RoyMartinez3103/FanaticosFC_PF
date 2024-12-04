@@ -4,9 +4,12 @@ import mx.unam.fanaticosfc.model.Venta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.math.BigDecimal;
 import java.util.List;
-
+@Repository
 public interface VentaRepository extends JpaRepository<Venta,Integer> {
     @Query("SELECT u.nombre, COUNT(v.usuario.idUsuario) " +
             "FROM Venta v " +
@@ -29,6 +32,7 @@ public interface VentaRepository extends JpaRepository<Venta,Integer> {
     @Query(value = "SELECT u.nombre, u.apellido_pat, COUNT(v.ID_USUARIO) as ventas " +
             "FROM venta v " +
             "JOIN usuario u ON v.ID_USUARIO=u.ID_USUARIO " +
+            "WHERE MONTH(fecha_venta) = MONTH(CURDATE()) " +
             "GROUP BY u.nombre " +
             "ORDER BY ventas DESC LIMIT 1",nativeQuery = true)
     List<Object[]> getEmpleadoDelMes();

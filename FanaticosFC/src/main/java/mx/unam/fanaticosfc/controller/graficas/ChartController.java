@@ -76,9 +76,11 @@ public class ChartController {
         // TARJETAS //
         BigDecimal gananciaMes = ventaRepository.gananciaMes();
         model.addAttribute("gananciaMes",gananciaMes);
+        System.out.println(gananciaMes);//********************************************************
 
         Integer ventasMes = ventaRepository.ventasMes();
         model.addAttribute("ventasMes",ventasMes);
+        System.out.println(ventasMes);//*******************************************************************
 
         List<Object[]> playeraMasVendida = detalleRepository.getPlayeraMasVendida();
 
@@ -92,10 +94,19 @@ public class ChartController {
         model.addAttribute("cantidad",cantidad);
 
         List<Object[]> empleadoMes = ventaRepository.getEmpleadoDelMes();
-        Object[] empleado = empleadoMes.get(0);
-        String nombre = (String) empleado[0];
-        String paterno = (String) empleado[1];
-        Long ventasReal = (Long) empleado[2];
+        String nombre,paterno;
+        Long ventasReal;
+
+        if(!empleadoMes.isEmpty()) {
+            Object[] empleado = empleadoMes.get(0);
+            nombre = (String) empleado[0];
+            paterno = (String) empleado[1];
+            ventasReal = (Long) empleado[2];
+        }else {
+            nombre = "Sin";
+            paterno = "Nombre";
+            ventasReal = 0L;
+        }
 
         model.addAttribute("nombre",nombre);
         model.addAttribute("paterno",paterno);

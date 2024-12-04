@@ -61,7 +61,7 @@
                                                 Ganancias del mes
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"
-                                             th:text="'$ ' + ${#numbers.formatInteger(gananciaMes, 3, 'DEFAULT')}"></div>
+                                                 th:text="'$ ' + ${#numbers.formatInteger(gananciaMes ?: 0, 3, 'DEFAULT')}"></div>
                                         </div>
                                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                     </div>
@@ -94,9 +94,9 @@
                                         <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
                                             Empleado del mes
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${nombre} + ' ' + ${paterno}"></div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${nombre} + ' ' + ${paterno ?: SN}"></div>
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${ventasReal}"></div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${ventasReal ?: 0}"></div>
                                 </div>
                             </div>
                         </div>

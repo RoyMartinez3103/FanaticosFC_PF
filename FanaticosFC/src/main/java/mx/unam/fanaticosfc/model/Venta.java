@@ -18,7 +18,6 @@ public class Venta {
     private BigDecimal montoTotal;
     @Column(name = "fecha_venta")
     private LocalDateTime fechaVenta;
-
     @Column(name = "es_venta_credito")
     private Boolean ventaCredito=false;
 

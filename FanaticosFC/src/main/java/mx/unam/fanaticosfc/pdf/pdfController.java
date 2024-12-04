@@ -1,5 +1,6 @@
 package mx.unam.fanaticosfc.pdf;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,12 @@ import java.nio.file.Path;
 @RestController
 public class pdfController {
 
+    @Autowired pdfGenerator pdfGenerator;
+
     @GetMapping("/pdf")
     public ResponseEntity<byte[]> generatePdf() throws Exception {
-        String filePath = "reporte.pdf";
-        new pdfGenerator().createCustomPdf(filePath);
+        String filePath = "ReporteFanaticosFC.pdf";
+        pdfGenerator.createCustomPdf(filePath);
 
         byte[] pdfBytes = Files.readAllBytes(Path.of(filePath));
 
