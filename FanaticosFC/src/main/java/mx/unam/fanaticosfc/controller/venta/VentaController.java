@@ -1,12 +1,15 @@
 package mx.unam.fanaticosfc.controller.venta;
 
 import jakarta.servlet.http.HttpSession;
+import mx.unam.fanaticosfc.dto.VentaCreditoDTO;
 import mx.unam.fanaticosfc.dto.VentaDTO;
 import mx.unam.fanaticosfc.model.*;
 import mx.unam.fanaticosfc.service.detalleVenta.DetalleVentaServiceImpl;
+import mx.unam.fanaticosfc.service.deudor.DeudorServiceImpl;
 import mx.unam.fanaticosfc.service.estatusVenta.EstatusVentaServiceImpl;
 import mx.unam.fanaticosfc.service.playera.PlayeraServiceImpl;
 import mx.unam.fanaticosfc.service.venta.VentaServiceImpl;
+import mx.unam.fanaticosfc.service.ventaCredito.VentaCreditoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/venta")
 public class VentaController {
     @Autowired
+    VentaCreditoServiceImpl ventaCrService;
+    @Autowired
     VentaServiceImpl ventaService;
     @Autowired
     EstatusVentaServiceImpl estatusVentaService;
@@ -28,6 +33,8 @@ public class VentaController {
     PlayeraServiceImpl playeraService;
     @Autowired
     DetalleVentaServiceImpl detalleService;
+    @Autowired
+    DeudorServiceImpl deudorService;
 
     //Lista paginada de las ventas
     @GetMapping("/lista-venta")
@@ -108,9 +115,12 @@ public class VentaController {
     @GetMapping("/alta-venta-credito")
     public String altaVentaCredito(HttpSession session,Model model){
 
+
         List<Playera> selectedJerseys = (List<Playera>) session.getAttribute("selectedJerseys");
         System.out.println(selectedJerseys);
-        VentaDTO ventadto = new VentaDTO();
+        VentaCreditoDTO ventaCreditoDTO = new VentaCreditoDTO();
+        List<Deudor> deudores = deudorService.listarTodos();
+
         List<DetalleVenta> detalleVentas = selectedJerseys.stream()
                 .map(playera -> {
                     DetalleVenta detalle = new DetalleVenta();
@@ -118,7 +128,7 @@ public class VentaController {
                     detalle.setCantidadPlayeras(1);
                     return detalle;
                 }).toList();
-        ventadto.setDetalles(detalleVentas);
+        ventaCreditoDTO.setDetalles(detalleVentas);
 
         Map<Integer, Map<String, Integer>> tallasDisponibles = new HashMap<>();
         for (Playera playera : selectedJerseys) {
@@ -131,33 +141,14 @@ public class VentaController {
             tallasDisponibles.put(playera.getIdPlayera(), mapaTallasIds);
         }
 
-        model.addAttribute("ventaDTO",ventadto);
+        model.addAttribute("deudor",deudores);
+        model.addAttribute("ventaDTO",ventaCreditoDTO);
         model.addAttribute("selectedJerseys",selectedJerseys);
         model.addAttribute("tallasDisponibles",tallasDisponibles);
 
         return "/venta/registrar-venta-credito";
     }
 
-    @PostMapping("/salvar-venta")
-    public String salvarVenta(@ModelAttribute Venta venta, RedirectAttributes flash, HttpSession session){
-        List<Playera> playerasSeleccionadas = (List<Playera>) session.getAttribute("selectedJerseys");
-//        double montoTotal = playerasSeleccionadas.stream()
-//                .mapToDouble(playera -> playera.getPrecioVenta()
-//                        .multiply(BigDecimal.valueOf(playera.getIdPlayera()))
-//                        .doubleValue())
-//                .sum();
-
-
-        venta.setMontoTotal(BigDecimal.valueOf(0.0));
-        try{
-            ventaService.guardar(venta);
-            flash.addFlashAttribute("success", "Venta registrada correctamente.");
-            return "redirect:/venta/lista-venta";
-        } catch (Exception e) {
-            flash.addFlashAttribute("error", "Error al guardar la venta.");
-            return "redirect:/venta/alta-venta";
-        }
-    }
 
     @PostMapping("/cancelar-venta/{id}")
     public String cancelarVenta(@PathVariable Integer id, RedirectAttributes flash){
@@ -196,6 +187,10 @@ public class VentaController {
                 detalleVenta.setPlayera(detalleDTO.getPlayera());
                 detalleVenta.setCantidadPlayeras(detalleDTO.getCantidadPlayeras());
                 detalleService.guardar(detalleVenta);
+
+                Playera playeraVendida = playeraService.buscarPorId(detalleVenta.getPlayera().getIdPlayera());
+                playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
+                playeraService.guardar(playeraVendida);
             }
             return "redirect:/venta/lista-venta";
 
@@ -206,52 +201,55 @@ public class VentaController {
 
     }
 
-//    @Autowired
-//    VentaDTOServiceImpl ventaDTOService;
-//
-//    @Autowired
-//    PlayeraServiceImpl playeraService;
-//
-//    @GetMapping("/alta-venta")
-//    public String altaVenta(Model model, HttpSession session) {
-//        List<Integer> playerasId = (List<Integer>) session.getAttribute("selectedJerseyIds");
-//
-//        List<Playera> playerasel = (List<Playera>) playeraService.findAllById(playerasId);
-//        return  "/venta/registrar-venta";
-//    }
-//
-//    @PostMapping("/salvar-venta")
-//    public String procesarVenta(@ModelAttribute VentaDTO ventaDTO,RedirectAttributes flash){
-//        try {
-//            ventaDTOService.procesarVenta(ventaDTO);
-//            flash.addFlashAttribute("success", "Venta registrada correctamente.");
-//            return "redirect: /venta/lista-venta";
-//        }catch (Exception e){
-//            flash.addFlashAttribute("error", "Error al guardar la venta.");
-//            return "redirect:/venta/alta-venta";
-//        }
-//    }
+    @PostMapping("/salvar-ventaCredito")
+    public String salvarVentaDTOCredito(@ModelAttribute VentaCreditoDTO ventaDTO, RedirectAttributes flash){
+        Venta venta = new Venta();
+        VentaCredito ventaCredito = new VentaCredito();
+        Deudor deudor = deudorService.buscarPorId(ventaDTO.getDeudor().getIdDeudor());
+        System.out.println(deudor);
 
-//    @PostMapping("/salvar-venta")
-//    public String salvarVenta(@RequestParam("montoTotal")BigDecimal monto, @RequestParam("jerseyData") String jerseyData){
-//        ObjectMapper mapper = new ObjectMapper();
-//        List<VentaDTO> ventaDTO;
-//        try{
-//            ventaDTO = mapper.readValue(jerseyData, new TypeReference<>() {
-//            });
-//        }catch (JsonProcessingException e){
-//            e.printStackTrace();
-//            throw new RuntimeException("Error al procesar los datos");
-//        }
-//
-//        System.out.println("Monto total: " + monto);
-//        ventaDTO.forEach(detalle -> {
-//            System.out.println("Playera ID: " + detalle.getPlayerasId());
-//            System.out.println("Cantidad: " + detalle.getCantidadPlayeras());
-//            System.out.println("Precio Unitario: " + detalle.getMontoTotal());
-//        });
-//
-//        return "redirect:/venta/lista-venta";
-//    }
+        BigDecimal montoTotal = BigDecimal.ZERO;
+
+        venta.setFechaVenta(LocalDateTime.now());
+        try{
+            for (DetalleVenta detalleVenta: ventaDTO.getDetalles()){
+                BigDecimal subTotal = detalleVenta.getPlayera().getPrecioVenta().multiply(BigDecimal.valueOf(detalleVenta.getCantidadPlayeras()));
+                montoTotal=montoTotal.add(subTotal);
+            }
+
+            venta.setMontoTotal(montoTotal);
+            venta.setVentaCredito(true);
+            System.out.println("MontoTotal for: "+montoTotal);
+            ventaService.guardar(venta);
+
+            ventaCredito.setMontoRestante(montoTotal);
+            ventaCredito.setDeudor(deudor);
+            ventaCredito.setPagosRealizados(0);
+            ventaCredito.setVenta(venta);
+
+            ventaCrService.guardar(ventaCredito);
+
+
+            flash.addFlashAttribute("success", "Venta registrada correctamente.");
+
+            for (DetalleVenta detalleDTO : ventaDTO.getDetalles()){
+                DetalleVenta detalleVenta = new DetalleVenta();
+                detalleVenta.setVenta(venta);
+                detalleVenta.setPlayera(detalleDTO.getPlayera());
+                detalleVenta.setCantidadPlayeras(detalleDTO.getCantidadPlayeras());
+                detalleService.guardar(detalleVenta);
+
+                Playera playeraVendida = playeraService.buscarPorId(detalleVenta.getPlayera().getIdPlayera());
+                playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
+                playeraService.guardar(playeraVendida);
+            }
+            return "redirect:/venta/lista-venta";
+
+        } catch (Exception e) {
+            flash.addFlashAttribute("error", "Error al guardar la venta.");
+            return "redirect:/venta/alta-venta-credito";
+        }
+
+    }
 
 }

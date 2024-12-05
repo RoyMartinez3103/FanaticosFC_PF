@@ -1,11 +1,13 @@
 package mx.unam.fanaticosfc.dto;
 
+import lombok.Data;
 import mx.unam.fanaticosfc.model.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 public class VentaCreditoDTO {
     //Tabla Venta
     private BigDecimal montoTotal;
@@ -17,7 +19,7 @@ public class VentaCreditoDTO {
 
     //Lista Credito
     private BigDecimal montoRestante;
-    private Integer pagosRealizados;
+    private Integer pagosRealizados=0;
     private Deudor deudor;
     private Venta venta;
 }

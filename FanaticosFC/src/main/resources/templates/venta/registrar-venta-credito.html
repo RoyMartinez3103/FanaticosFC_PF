@@ -25,7 +25,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Detalles de la Venta</h6>
                             </div>
                             <div class="card-body">
-                                <form th:action="@{/venta/salvar-ventadto}" method="post" th:object="${ventaDTO}">
+                                <form th:action="@{/venta/salvar-ventaCredito}" method="post" th:object="${ventaDTO}">
                                     <input type="hidden">
 
                                     <div class="table-responsive">
@@ -64,7 +64,7 @@
                                                            onchange="updateSubtotal(this)">
                                                 </td>
                                                 <td th:text="${'$ ' + selectedJerseys[iterStat.index].precioVenta}"></td>
-                                                <td id="subtotal-${iterStat.index}">0.00</td> <!-- Subtotal calculado en frontend -->
+                                                <td id="subtotal-${iterStat.index}"></td> <!-- Subtotal calculado en frontend -->
                                             </tr>
                                             </tbody>
                                             <tfoot>
@@ -74,6 +74,15 @@
                                             </tr>
                                             </tfoot>
                                         </table>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="form-group col-md-6">
+                                            <label for="deudor">Cliente</label>
+                                            <select class="form-control" th:field="*{deudor}" id="deudor" name="deudor" required>
+                                                <option value="" disabled selected>Selecciona un cliente</option>
+                                                <option th:each="sel : ${deudor}" th:value="${sel.idDeudor}" th:text="${sel.nombre + ' ' +sel.apellidoPat}"></option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-md-6 text-right">
