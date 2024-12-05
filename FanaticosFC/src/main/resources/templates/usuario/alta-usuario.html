@@ -101,11 +101,11 @@
                 <div class="form-group col-lf-3">
                   <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="esAdmin"
-                           th:field="*{esAdmin}">
+                           th:field="*{rol}" th:value="ADMIN">
                     <label class="custom-control-label" for="esAdmin">Es admin</label>
                   </div>
-                  <div class="text-danger" th:if="${#fields.hasErrors('esAdmin')}"
-                       th:errors="*{esAdmin}"></div>
+                  <div class="text-danger" th:if="${#fields.hasErrors('rol')}"
+                       th:errors="*{rol}"></div>
                 </div>
 
                 <div class="form-group col-lf-3">

@@ -3,12 +3,8 @@ package mx.unam.fanaticosfc.controller.usuario;
 import jakarta.validation.Valid;
 import mx.unam.fanaticosfc.model.Usuario;
 import mx.unam.fanaticosfc.service.usuario.UsuarioServiceImpl;
-import mx.unam.fanaticosfc.util.RenderPagina;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,9 +43,11 @@ public class UsuarioController {
             model.addAttribute("contenido", "ERROR");
             return "/usuario/alta-usuario";
         }
+        if (usuario.getRol() == null) {
+            usuario.setRol("USER");
+        }
 
         usuarioService.guardar(usuario);
-        System.out.println(usuario);
         flash.addFlashAttribute("success", "El usuario se guardó correctamente");
 
         return "redirect:/usuario/lista-usuario";

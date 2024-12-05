@@ -77,10 +77,10 @@
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             Playera más vendida
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${equipo}"></div>
-                                        <div class="h6 mb-0 font-weight text-gray-800" th:text="${color}"></div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${equipo ?: SE}"></div>
+                                        <div class="h6 mb-0 font-weight text-gray-800" th:text="${color ?: SC }"></div>
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${cantidad}"></div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${cantidad ?: 0}"></div>
                                 </div>
                             </div>
                         </div>

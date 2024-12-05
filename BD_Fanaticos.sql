@@ -95,8 +95,9 @@ CREATE TABLE USUARIO(
     RFC                 VARCHAR(13)     NOT NULL,
     MAIL                VARCHAR(40)     NOT NULL,
     USERNAME            VARCHAR(20)     NOT NULL,
-    CONTRASEÑA          VARCHAR(15)     NOT NULL,
-    ES_ADMIN            BIT         NOT NULL CHECK (ES_ADMIN = 1 OR ES_ADMIN = 0),
+    CONTRASEÑA  			VARCHAR(15)     NOT NULL,
+    -- ES_ADMIN            BIT         NOT NULL CHECK (ES_ADMIN = 1 OR ES_ADMIN = 0),
+    ROL						VARCHAR(10)		 NOT NULL,
     VENTAS_REALIZADAS   INT             NOT NULL   DEFAULT 0,
     PRIMARY KEY (ID_USUARIO),
     CONSTRAINT UK_NOMBRE UNIQUE (NOMBRE, APELLIDO_PAT, APELLIDO_MAT),
@@ -248,16 +249,10 @@ INSERT INTO PLAYERA (COLOR, TALLA, TIPO_MANGA, PRECIO_REAL, STOCK, PRECIO_VENTA,
 ('Azul','CH','CORTA',450.0,20,989.0,2,9), -- Adidas, Boca J
 ('Blanco', 'M', 'LARGA', 650.0, 13, 1099.0, 2, 10); -- Adidas, River
 
-INSERT INTO USUARIO (NOMBRE, APELLIDO_PAT, APELLIDO_MAT, FECHA_NAC, RFC, USERNAME, CONTRASEÑA, MAIL, ES_ADMIN, VENTAS_REALIZADAS) VALUES
-('Ana', 'García', 'López', '1990-01-01', 'GALA9001017D5', 'ana_garcia', 'contrasena123', 'ana_garcia@correo.com', 1, 3),  -- ADMIN
-('Juan', 'Pérez', 'Martínez', '1985-07-15', 'PEMJ8507159O4', 'juan_perez', 'contrasena456', 'juan_perez@correo.com', 1, 2),
-('María', 'Gómez', 'Hernández', '2000-12-24', 'GOHM001224R2A', 'maria_gomez', 'contrasena789', 'maria_gomez@correo.com', 1, 2),
-('Laura', 'Pérez', 'Morales', '1995-08-25', 'PEMO9508258R4', 'laura_perez', 'passwordlaura', 'laura_p@correo.com', 0, 0),-- EMPLEADO
-('David', 'Jiménez', 'Torres', '1987-12-02', 'JITO8712024W3', 'david_jimenez', 'jimenez789', 'david_j@correo.com', 0, 0),
-('Andrea', 'Méndez', 'Ramírez', '1993-04-18', 'MERA9304181F8', 'andrea_mendez', 'claveandrea', 'andrea_m@correo.com', 0, 0),
-('Luis', 'Castro', 'Vega', '1982-09-09', 'CAVE8209095L1', 'luis_castro', 'castroluis', 'luis_c@correo.com', 0, 0),
-('Diana', 'Núñez', 'Salas', '1996-07-07', 'NUSA9607079X4', 'diana_nunez', 'diana123', 'diana_n@correo.com', 0, 0),
-('Fernando', 'Ortiz', 'Rivas', '1989-05-30', 'ORRI8905306G7', 'fernando_ortiz', 'ortiz789', 'fernando_o@correo.com', 0, 0);
+INSERT INTO USUARIO (NOMBRE, APELLIDO_PAT, APELLIDO_MAT, FECHA_NAC, RFC, USERNAME, CONTRASEÑA, MAIL, ROL, VENTAS_REALIZADAS) VALUES
+('Ana', 'García', 'López', '1990-01-01', 'GALA9001017D5', 'ana_garcia', 'contrasena123', 'ana_garcia@correo.com', "ADMIN", 3),  -- ADMIN
+('Juan', 'Pérez', 'Martínez', '1985-07-15', 'PEMJ8507159O4', 'juan_perez', 'contrasena456', 'juan_perez@correo.com', "USER", 2),
+('María', 'Gómez', 'Hernández', '2000-12-24', 'GOHM001224R2A', 'maria_gomez', 'contrasena789', 'maria_gomez@correo.com', "USER", 2);
 
 
 INSERT INTO ESTATUS_VENTA(ESTATUS,DESCRIPCION) VALUES
@@ -270,10 +265,10 @@ INSERT INTO VENTA (MONTO_TOTAL, FECHA_VENTA, ES_VENTA_CREDITO,ID_USUARIO,ID_ESTA
 (1199.0, '2024-06-02 11:30:00', 1, 3,2),
 (3398.0, '2024-06-03 14:45:00', 0, 1,1),
 (5996.0, '2024-06-04 16:15:00', 1, 2,2),
-(5026.0,'2024-09-28 11:11:11',0,5,1),
+(5026.0,'2024-09-28 11:11:11',0,2,1),
 (4297.0,'2024-09-28 14:15:10',1,1,2),
 (5996.0,'2024-09-29 10:20:00',0,3,1),
-(5546.0,'2024-09-30 11:35:20',0,4,1);
+(5546.0,'2024-09-30 11:35:20',0,3,1);
 
 
 INSERT INTO DETALLE_VENTA (CANTIDAD_PLAYERAS, ID_PLAYERA, ID_VENTA) VALUES

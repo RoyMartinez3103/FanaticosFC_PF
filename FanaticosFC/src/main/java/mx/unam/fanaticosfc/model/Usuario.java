@@ -54,15 +54,15 @@ public class Usuario {
     @Size(min = 8, max = 13, message = "La contraseña debe tener entre 8 y 12 caracteres")
     @Column(name = "Contraseña")
     private String contrasena;
-    @Column(name = "es_admin")
-    private Boolean esAdmin;
+    @Column(name = "rol")
+    private String rol;
     @Column(name = "ventas_realizadas")
     private Integer ventasRealizadas=0;
 
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellidoPat, String apellidoMat, LocalDate fechaNac, String rfc, String mail, String username, String contrasena, Boolean esAdmin, Integer ventasRealizadas) {
+    public Usuario(String nombre, String apellidoPat, String apellidoMat, LocalDate fechaNac, String rfc, String mail, String username, String contrasena, String rol, Integer ventasRealizadas) {
         this.nombre = nombre;
         this.apellidoPat = apellidoPat;
         this.apellidoMat = apellidoMat;
@@ -71,7 +71,7 @@ public class Usuario {
         this.mail = mail;
         this.username = username;
         this.contrasena = contrasena;
-        this.esAdmin = esAdmin;
+        this.rol = rol;
         this.ventasRealizadas = ventasRealizadas;
     }
 
@@ -87,9 +87,13 @@ public class Usuario {
                 ", mail='" + mail + '\'' +
                 ", username='" + username + '\'' +
                 ", contrasena='" + contrasena + '\'' +
-                ", esAdmin=" + esAdmin +
+                ", rol=" + rol +
                 ", ventasRealizadas=" + ventasRealizadas +
                 '}';
+    }
+
+    public boolean isAdmin() {
+        return "ADMIN".equals(rol);
     }
 
     @Override

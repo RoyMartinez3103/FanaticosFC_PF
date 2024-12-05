@@ -28,7 +28,7 @@
         <div class="card shadow mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Usuarios Registrados</h6>
-            <a href="/usuario/alta-usuario" class="btn btn-primary btn-sm float-right">
+            <a th:href="@{/usuario/alta-usuario}" class="btn btn-primary btn-sm float-right">
               <i class="fas fa-plus"></i> Agregar Usuario
             </a>
           </div>
@@ -45,7 +45,7 @@
                   <th>RFC</th>
                   <th>Email</th>
                   <th>Username</th>
-                  <th>Es administrador?</th>
+                  <th>Rol</th>
                   <th>Ventas Realizadas</th>
                   <th>Acciones</th>
                 </tr>
@@ -60,7 +60,7 @@
                   <td th:text="${usuario.rfc}"></td>
                   <td th:text="${usuario.mail}"></td>
                   <td th:text="${usuario.username}"></td>
-                  <td th:text="${usuario.esAdmin ? 'Sí' : 'No'}"></td>
+                  <td th:text="${usuario.rol}"></td>
                   <td th:text="${usuario.ventasRealizadas}"></td>
 
 

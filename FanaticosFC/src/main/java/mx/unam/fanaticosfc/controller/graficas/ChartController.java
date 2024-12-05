@@ -83,11 +83,20 @@ public class ChartController {
         System.out.println(ventasMes);//*******************************************************************
 
         List<Object[]> playeraMasVendida = detalleRepository.getPlayeraMasVendida();
+        String equipo;
+        String color;
+        BigDecimal cantidad;
 
-        Object[] fila = playeraMasVendida.get(0);
-            String equipo = (String) fila[0];
-            String color = (String) fila[1];
-            BigDecimal cantidad = (BigDecimal) fila[2];
+        if(!playeraMasVendida.isEmpty()) {
+            Object[] fila = playeraMasVendida.get(0);
+            equipo = (String) fila[0];
+            color = (String) fila[1];
+            cantidad = (BigDecimal) fila[2];
+        }else {
+            equipo = "Sin";
+            color = "Playeras";
+            cantidad = BigDecimal.valueOf(0);
+        }
 
         model.addAttribute("equipo",equipo);
         model.addAttribute("color",color);
