@@ -59,18 +59,9 @@ public class PlayeraController {
                               @RequestParam("imagen") MultipartFile imageFile,
                               Model model,
                               RedirectAttributes flash) throws IOException {
-
-//        String ruta= "C://Desktop/Playeras";
-//        Integer index = imageFile.getOriginalFilename().indexOf(".");
-//        String extension = "";
-//        extension = "." + imageFile.getOriginalFilename().substring(index+1);
-//        String nombreImagen = Calendar.getInstance().getTimeInMillis()+extension;
-//        Path rutaAbs = Paths.get(ruta+"//"+nombreImagen);
-//        Files.write(rutaAbs,imageFile.getBytes());
-//        playera.setImagenRuta(nombreImagen);
         try {
             if (!imageFile.isEmpty()) {
-                String directorioUploads = "src/main/resources/static/img/playeras/";
+                String directorioUploads = "src/main/resources/uploads/";
                 Path rutaDirectorio = Paths.get(directorioUploads);
                 if (!Files.exists(rutaDirectorio)) {
                     Files.createDirectories(rutaDirectorio);
@@ -81,7 +72,7 @@ public class PlayeraController {
                 Files.copy(imageFile.getInputStream(), rutaArchivo, StandardCopyOption.REPLACE_EXISTING);
                 System.out.println("Archivo guardado en: " + rutaArchivo.toAbsolutePath());
 
-                playera.setImagenRuta("/img/playeras/" + nombreArchivo);
+                playera.setImagenRuta("/uploads/" + nombreArchivo);
             }
             if (!imageFile.isEmpty()) {
                 System.out.println("Archivo recibido: " + imageFile.getOriginalFilename());
