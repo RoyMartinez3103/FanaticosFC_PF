@@ -22,7 +22,7 @@
       </div>
       <div class="img-container">
         <img class="img-playera"
-             th:src="@{'/img/playeras/' + ${jersey.idPlayera} + '.webp'}"
+             th:src="@{${jersey.imagenRuta}}"
              th:alt="${jersey.equipo.nombre}">
       </div>
       <div class="separator"></div>

@@ -58,6 +58,9 @@ public class Playera {
     @Column(name = "precio_venta")
     private BigDecimal precioVenta;
 
+    @Column(name = "imagen_ruta")
+    private String imagenRuta;
+
     @ManyToOne
     @JoinColumn(name = "id_marca")
     private Marca marca;
@@ -69,7 +72,7 @@ public class Playera {
     public Playera() {
     }
 
-    public Playera(String color, String talla, String tipoManga, BigDecimal precioReal, Integer stock, BigDecimal precioVenta, Marca marca, Equipo equipo) {
+    public Playera(String color, String talla, String tipoManga, BigDecimal precioReal, Integer stock, BigDecimal precioVenta, String imagenRuta, Marca marca, Equipo equipo) {
         this.color = color;
         this.talla = talla;
         this.tipoManga = tipoManga;
@@ -78,6 +81,7 @@ public class Playera {
         this.precioVenta = precioVenta;
         this.marca = marca;
         this.equipo = equipo;
+        this.imagenRuta = imagenRuta;
     }
 
     @Override
@@ -92,6 +96,7 @@ public class Playera {
                 ", precioVenta=" + precioVenta +
                 ", marca=" + marca +
                 ", equipo=" + equipo +
+                ", imagenRuta= " + imagenRuta +
                 '}';
     }
 

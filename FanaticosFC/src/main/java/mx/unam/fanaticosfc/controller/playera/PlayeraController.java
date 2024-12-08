@@ -13,11 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 
 @Controller
 @RequestMapping("/playera")
@@ -51,24 +55,61 @@ public class PlayeraController {
 
     @PostMapping("/salvar-playera")
     public String salvarPlayera(@Valid @ModelAttribute("playera") Playera playera,
-                              BindingResult result,
+                                BindingResult result,
+                              @RequestParam("imagen") MultipartFile imageFile,
                               Model model,
-                              RedirectAttributes flash) {
-        List<Equipo> equipos = equipoService.listarTodos();
-        List<Marca> marcas = marcaService.listarTodos();
+                              RedirectAttributes flash) throws IOException {
 
-        model.addAttribute("equipo",equipos);
-        model.addAttribute("marca",marcas);
+//        String ruta= "C://Desktop/Playeras";
+//        Integer index = imageFile.getOriginalFilename().indexOf(".");
+//        String extension = "";
+//        extension = "." + imageFile.getOriginalFilename().substring(index+1);
+//        String nombreImagen = Calendar.getInstance().getTimeInMillis()+extension;
+//        Path rutaAbs = Paths.get(ruta+"//"+nombreImagen);
+//        Files.write(rutaAbs,imageFile.getBytes());
+//        playera.setImagenRuta(nombreImagen);
+        try {
+            if (!imageFile.isEmpty()) {
+                String directorioUploads = "src/main/resources/static/img/playeras/";
+                Path rutaDirectorio = Paths.get(directorioUploads);
+                if (!Files.exists(rutaDirectorio)) {
+                    Files.createDirectories(rutaDirectorio);
+                }
 
-        if (result.hasErrors()) {
-            model.addAttribute("contenido", "ERROR. No debe ser vacío");
-            return "/playera/alta-playera";
+                String nombreArchivo = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+                Path rutaArchivo = rutaDirectorio.resolve(nombreArchivo);
+                Files.copy(imageFile.getInputStream(), rutaArchivo, StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Archivo guardado en: " + rutaArchivo.toAbsolutePath());
+
+                playera.setImagenRuta("/img/playeras/" + nombreArchivo);
+            }
+            if (!imageFile.isEmpty()) {
+                System.out.println("Archivo recibido: " + imageFile.getOriginalFilename());
+            } else {
+                System.out.println("El archivo no se recibió correctamente.");
+            }
+
+
+            List<Equipo> equipos = equipoService.listarTodos();
+            List<Marca> marcas = marcaService.listarTodos();
+
+            model.addAttribute("equipo", equipos);
+            model.addAttribute("marca", marcas);
+
+            if (result.hasErrors()) {
+                model.addAttribute("contenido", "ERROR.");
+                System.out.println("errores: " + result.getAllErrors());
+                return "/playera/alta-playera";
+            }
+            System.out.println("Ruta almacenada "+ playera.getImagenRuta());
+
+            playeraService.guardar(playera);
+            flash.addFlashAttribute("success", "La playera se guardó correctamente");
+            return "redirect:/playera/lista-playera";
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
-        playeraService.guardar(playera);
-        System.out.println(playera);
-        flash.addFlashAttribute("success", "La playera se guardó correctamente");
-
         return "redirect:/playera/lista-playera";
     }
 

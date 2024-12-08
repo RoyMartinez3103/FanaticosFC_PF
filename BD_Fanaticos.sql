@@ -8,14 +8,13 @@
    USE FANATICOS_DB;
 
 --
--- TABLE: MARCAS
+-- TABLE: MARCA
 -- Se guardarán las marcas de los fabricantes de las playeras.
 --
 
 CREATE TABLE MARCA(
     ID_MARCA    INT              NOT NULL   AUTO_INCREMENT,
     NOMBRE      VARCHAR(40)      NOT NULL,
-    -- LOGO        BLOB             NOT NULL   DEFAULT "Sin Logo",
 
     PRIMARY KEY (ID_MARCA),
     CONSTRAINT UK_NOMBRE UNIQUE (NOMBRE)
@@ -23,7 +22,7 @@ CREATE TABLE MARCA(
 
 
 --
--- TABLE: DEUDORES
+-- TABLE: DEUDOR
 -- Se guardarán los datos de los deudores de las ventas a crédito.
 --
 
@@ -43,7 +42,7 @@ CREATE TABLE DEUDOR(
 
 
 --
--- TABLE: EQUIPOS
+-- TABLE: EQUIPO
 -- Se guardarán los datos de los equipos.
 --
 
@@ -52,7 +51,6 @@ CREATE TABLE EQUIPO(
     NOMBRE       VARCHAR(40)     NOT NULL,
     PAIS         VARCHAR(40)     NOT NULL,
     LIGA        VARCHAR(40)      NOT NULL,
-    -- ESCUDO       BLOB            NOT NULL   DEFAULT "Sin escudo",
     PRIMARY KEY (ID_EQUIPO),
     CONSTRAINT UK_NOMBRE UNIQUE (NOMBRE)
 );
@@ -72,6 +70,7 @@ CREATE TABLE PLAYERA(
     PRECIO_REAL     FLOAT           NOT NULL CHECK (PRECIO_REAL > 0),
     STOCK           INT             NOT NULL CHECK (STOCK > 0),
     PRECIO_VENTA    FLOAT           NOT NULL CHECK (PRECIO_VENTA > 0),
+    IMAGEN_RUTA	  VARCHAR(255)		NOT NULL DEFAULT "Sin_ruta",
     ID_MARCA        INT             NOT NULL,
     ID_EQUIPO       INT             NOT NULL,
     PRIMARY KEY (ID_PLAYERA),
@@ -95,8 +94,7 @@ CREATE TABLE USUARIO(
     RFC                 VARCHAR(13)     NOT NULL,
     MAIL                VARCHAR(40)     NOT NULL,
     USERNAME            VARCHAR(20)     NOT NULL,
-    CONTRASEÑA  			VARCHAR(15)     NOT NULL,
-    -- ES_ADMIN            BIT         NOT NULL CHECK (ES_ADMIN = 1 OR ES_ADMIN = 0),
+    PASSWORD  				VARCHAR(15)     NOT NULL,
     ROL						VARCHAR(10)		 NOT NULL,
     VENTAS_REALIZADAS   INT             NOT NULL   DEFAULT 0,
     PRIMARY KEY (ID_USUARIO),
@@ -148,7 +146,7 @@ CREATE TABLE VENTA(
 
 CREATE TABLE DETALLE_VENTA(
     ID_DETALLE_VENTA     INT     NOT NULL  AUTO_INCREMENT,
-    CANTIDAD_PLAYERAS    INT     NOT NULL      CHECK (CANTIDAD_PLAYERAS > 0),
+    CANTIDAD_PLAYERAS    INT     NOT NULL  CHECK (CANTIDAD_PLAYERAS > 0),
     ID_PLAYERA           INT     NOT NULL,
     ID_VENTA             INT     NOT NULL,
     PRIMARY KEY (ID_DETALLE_VENTA),
@@ -231,25 +229,31 @@ INSERT INTO EQUIPO (NOMBRE, PAIS, LIGA) VALUES
 ('Bayern Munich', 'Alemania', 'Bundesliga'),
 ('Borussia Dortmund', 'Alemania', 'Bundesliga'),
 ('Boca Juniors', 'Argentina', 'Primera División'),
-('River Plate', 'Argentina', 'Primera División');
+('River Plate', 'Argentina', 'Primera División'),
+('Feyenoord','Paises Bajos','Eredivisie');
 
 
 
-INSERT INTO PLAYERA (COLOR, TALLA, TIPO_MANGA, PRECIO_REAL, STOCK, PRECIO_VENTA, ID_MARCA, ID_EQUIPO) VALUES
-('Azul', 'CH', 'CORTA', 800.0, 10, 1299.0, 6, 1), -- Prima, Cruz Azul
-('Azul', 'M', 'CORTA', 800.0, 10, 1299.0, 6, 1),
-('Blanco', 'CH', 'CORTA', 700.0, 15, 1199.0, 1, 2),  -- Nike, Pumas
-('Vino', 'XG', 'CORTA', 500.00, 20, 1499.00, 1, 3), -- Nike, Barcelona
-('Blanco', 'M', 'LARGA', 900.00, 25, 1699.0, 2, 4),   -- Adidas, Real Madrid
-('Blanco', 'G', 'LARGA', 900.00, 25, 1699.0, 2, 4),
-('Rojo', 'CH', 'LARGA', 999.0, 12, 1599.0,2,5),  -- Adidas, Man Uni
-('Rojo', 'M', 'CORTA', 999.0, 9, 1499.0,1,6),  -- Nike, Liverpool
-('Negro','G','CORTA',1099.0,18,1649.0,2,7),  -- Adidas, Bayern Mun
-('Amarillo','XG','CORTA',1099.0,5,1349.0,3,8),  -- Puma, Borussia
-('Azul','CH','CORTA',450.0,20,989.0,2,9), -- Adidas, Boca J
-('Blanco', 'M', 'LARGA', 650.0, 13, 1099.0, 2, 10); -- Adidas, River
+INSERT INTO PLAYERA (COLOR, TALLA, TIPO_MANGA, PRECIO_REAL, STOCK, PRECIO_VENTA, IMAGEN_RUTA, ID_MARCA, ID_EQUIPO) VALUES
+('Azul', 'CH', 'CORTA', 800.0, 10, 1299.0, '/img/playeras/cruzazul.jpg', 6, 1), -- Prima, Cruz Azul
+('Azul', 'M', 'CORTA', 800.0, 10, 1299.0, '/img/playeras/cruzazul.jpg', 6, 1),
+('Blanco', 'CH', 'CORTA', 700.0, 15, 1199.0, '/img/playeras/pumas.jpg', 1, 2),  -- Nike, Pumas
+('Vino', 'XG', 'CORTA', 500.00, 20, 1499.00, '/img/playeras/barcelona.jpg', 1, 3), -- Nike, Barcelona
+('Blanco', 'M', 'LARGA', 900.00, 25, 1699.0, '/img/playeras/realmadrid.jpg', 2, 4),   -- Adidas, Real Madrid
+('Blanco', 'G', 'LARGA', 900.00, 25, 1699.0, '/img/playeras/realmadrid.jpg', 2, 4),
+('Rojo', 'CH', 'LARGA', 999.0, 12, 1599.0,'/img/playeras/manunited.jpg', 2,5),  -- Adidas, Man Uni
+('Rojo', 'M', 'CORTA', 999.0, 9, 1499.0,'/img/playeras/liverpool.jpg', 1,6),  -- Nike, Liverpool
+('Negro','G','CORTA',1099.0,18,1649.0,'/img/playeras/bmunich.jpg', 2,7),  -- Adidas, Bayern Mun
+('Amarillo','XG','CORTA',1099.0,5,1349.0,'/img/playeras/borussiad.jpg', 3,8),  -- Puma, Borussia
+('Azul','CH','CORTA',450.0,20,989.0,'/img/playeras/bocajrs.jpg', 2,9), -- Adidas, Boca J
+('Blanco', 'M', 'LARGA', 650.0, 13, 1099.0, '/img/playeras/riverp.jpg', 2, 10), -- Adidas, River
+('Dorado','CH','CORTA',699.0,12,1199,'/img/playeras/a510f710-21bd-439d-9f49-14ced2047930_pumas2.jpg', 1,2),
+('Rojo','M','CORTA',999.0,5,1699.0,'/img/playeras/c5878885-e0cd-4527-bca0-f757b0311c9b_cruzazulr.jpg', 6,1),
+('Negro', 'XG','CORTA', 899,5,1599.0,'/img/playeras/34d2323a-6c3f-4396-ba54-07c25acbe8db_feyenoord.jpg',2,11);
 
-INSERT INTO USUARIO (NOMBRE, APELLIDO_PAT, APELLIDO_MAT, FECHA_NAC, RFC, USERNAME, CONTRASEÑA, MAIL, ROL, VENTAS_REALIZADAS) VALUES
+
+
+INSERT INTO USUARIO (NOMBRE, APELLIDO_PAT, APELLIDO_MAT, FECHA_NAC, RFC, USERNAME, PASSWORD, MAIL, ROL, VENTAS_REALIZADAS) VALUES
 ('Ana', 'García', 'López', '1990-01-01', 'GALA9001017D5', 'ana_garcia', 'contrasena123', 'ana_garcia@correo.com', "ADMIN", 3),  -- ADMIN
 ('Juan', 'Pérez', 'Martínez', '1985-07-15', 'PEMJ8507159O4', 'juan_perez', 'contrasena456', 'juan_perez@correo.com', "USER", 2),
 ('María', 'Gómez', 'Hernández', '2000-12-24', 'GOHM001224R2A', 'maria_gomez', 'contrasena789', 'maria_gomez@correo.com', "USER", 2);

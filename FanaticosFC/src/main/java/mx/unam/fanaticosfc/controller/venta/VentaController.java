@@ -1,6 +1,7 @@
 package mx.unam.fanaticosfc.controller.venta;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import mx.unam.fanaticosfc.dto.VentaCreditoDTO;
 import mx.unam.fanaticosfc.dto.VentaDTO;
 import mx.unam.fanaticosfc.model.*;
@@ -59,7 +60,7 @@ public class VentaController {
 
     //Con las playeras seleccionadas, se dirige a la venta seleccionada
     @PostMapping("/seleccionar-tipo")
-    public String tipoVenta(@RequestParam("selectedJerseys") List<Playera> selectedJerseys,
+    public String tipoVenta(@Valid @RequestParam("selectedJerseys") List<Playera> selectedJerseys,
                             @RequestParam("tipo") String tipo,
                             HttpSession session,
                             Model model) {
