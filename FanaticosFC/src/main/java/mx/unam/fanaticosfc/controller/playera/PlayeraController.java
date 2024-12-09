@@ -61,7 +61,7 @@ public class PlayeraController {
                               RedirectAttributes flash) throws IOException {
         try {
             if (!imageFile.isEmpty()) {
-                String directorioUploads = "src/main/resources/uploads/";
+                String directorioUploads = "C:/uploads/";
                 Path rutaDirectorio = Paths.get(directorioUploads);
                 if (!Files.exists(rutaDirectorio)) {
                     Files.createDirectories(rutaDirectorio);
