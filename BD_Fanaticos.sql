@@ -235,21 +235,21 @@ INSERT INTO EQUIPO (NOMBRE, PAIS, LIGA) VALUES
 
 
 INSERT INTO PLAYERA (COLOR, TALLA, TIPO_MANGA, PRECIO_REAL, STOCK, PRECIO_VENTA, IMAGEN_RUTA, ID_MARCA, ID_EQUIPO) VALUES
-('Azul', 'CH', 'CORTA', 800.0, 10, 1299.0, '/img/playeras/cruzazul.jpg', 6, 1), -- Prima, Cruz Azul
-('Azul', 'M', 'CORTA', 800.0, 10, 1299.0, '/img/playeras/cruzazul.jpg', 6, 1),
-('Blanco', 'CH', 'CORTA', 700.0, 15, 1199.0, '/img/playeras/pumas.jpg', 1, 2),  -- Nike, Pumas
-('Vino', 'XG', 'CORTA', 500.00, 20, 1499.00, '/img/playeras/barcelona.jpg', 1, 3), -- Nike, Barcelona
-('Blanco', 'M', 'LARGA', 900.00, 25, 1699.0, '/img/playeras/realmadrid.jpg', 2, 4),   -- Adidas, Real Madrid
-('Blanco', 'G', 'LARGA', 900.00, 25, 1699.0, '/img/playeras/realmadrid.jpg', 2, 4),
-('Rojo', 'CH', 'LARGA', 999.0, 12, 1599.0,'/img/playeras/manunited.jpg', 2,5),  -- Adidas, Man Uni
-('Rojo', 'M', 'CORTA', 999.0, 9, 1499.0,'/img/playeras/liverpool.jpg', 1,6),  -- Nike, Liverpool
-('Negro','G','CORTA',1099.0,18,1649.0,'/img/playeras/bmunich.jpg', 2,7),  -- Adidas, Bayern Mun
-('Amarillo','XG','CORTA',1099.0,5,1349.0,'/img/playeras/borussiad.jpg', 3,8),  -- Puma, Borussia
-('Azul','CH','CORTA',450.0,20,989.0,'/img/playeras/bocajrs.jpg', 2,9), -- Adidas, Boca J
-('Blanco', 'M', 'LARGA', 650.0, 13, 1099.0, '/img/playeras/riverp.jpg', 2, 10), -- Adidas, River
-('Dorado','CH','CORTA',699.0,12,1199,'/img/playeras/a510f710-21bd-439d-9f49-14ced2047930_pumas2.jpg', 1,2),
-('Rojo','M','CORTA',999.0,5,1699.0,'/img/playeras/c5878885-e0cd-4527-bca0-f757b0311c9b_cruzazulr.jpg', 6,1),
-('Negro', 'XG','CORTA', 899,5,1599.0,'/img/playeras/34d2323a-6c3f-4396-ba54-07c25acbe8db_feyenoord.jpg',2,11);
+('Azul', 'CH', 'CORTA', 800.0, 10, 1299.0, '/uploads/cruzazul.jpg', 6, 1), -- Prima, Cruz Azul
+('Azul', 'M', 'CORTA', 800.0, 10, 1299.0, '/uploads/cruzazul.jpg', 6, 1),
+('Blanco', 'CH', 'CORTA', 700.0, 15, 1199.0, '/uploads/pumas.jpg', 1, 2),  -- Nike, Pumas
+('Vino', 'XG', 'CORTA', 500.00, 20, 1499.00, '/uploads/barcelona.jpg', 1, 3), -- Nike, Barcelona
+('Blanco', 'M', 'LARGA', 900.00, 25, 1699.0, '/uploads/realmadrid.jpg', 2, 4),   -- Adidas, Real Madrid
+('Blanco', 'G', 'LARGA', 900.00, 25, 1699.0, '/uploads/realmadrid.jpg', 2, 4),
+('Rojo', 'CH', 'LARGA', 999.0, 12, 1599.0,'/uploads/manunited.jpg', 2,5),  -- Adidas, Man Uni
+('Rojo', 'M', 'CORTA', 999.0, 9, 1499.0,'/uploads/liverpool.jpg', 1,6),  -- Nike, Liverpool
+('Negro','G','CORTA',1099.0,18,1649.0,'/uploads/bmunich.jpg', 2,7),  -- Adidas, Bayern Mun
+('Amarillo','XG','CORTA',1099.0,5,1349.0,'/uploads/borussiad.jpg', 3,8),  -- Puma, Borussia
+('Azul','CH','CORTA',450.0,20,989.0,'/uploads/bocajrs.jpg', 2,9), -- Adidas, Boca J
+('Blanco', 'M', 'LARGA', 650.0, 13, 1099.0, '/uploads/riverp.jpg', 2, 10), -- Adidas, River
+('Dorado','CH','CORTA',699.0,12,1199,'/uploads/a510f710-21bd-439d-9f49-14ced2047930_pumas2.jpg', 1,2),
+('Rojo','M','CORTA',999.0,5,1699.0,'/uploads/c5878885-e0cd-4527-bca0-f757b0311c9b_cruzazulr.jpg', 6,1),
+('Negro', 'XG','CORTA', 899,5,1599.0,'/uploads/34d2323a-6c3f-4396-ba54-07c25acbe8db_feyenoord.jpg',2,11);
 
 
 
@@ -299,3 +299,21 @@ INSERT INTO VENTA_CREDITO (MONTO_RESTANTE, PAGOS_REALIZADOS, ID_DEUDOR, ID_VENTA
 INSERT INTO PAGO_CREDITO (FECHA_PAGO, MONTO_PAGO, ID_VENTA_CREDITO) VALUES
 ('2024-06-02 11:30:20', 400.00, 1),
 ('2024-06-04 15:14:13', 500.00, 2);
+
+-- *************** TRIGGER **********************
+
+DROP TRIGGER IF EXISTS trg_estatus_update;
+DELIMITER $$
+CREATE TRIGGER trg_estatus_update
+BEFORE UPDATE ON VENTA_CREDITO
+FOR EACH ROW
+BEGIN
+    IF NEW.MONTO_RESTANTE = 0 THEN
+        UPDATE VENTA SET ID_ESTATUS_VENTA = (SELECT ID_ESTATUS_VENTA FROM estatus_venta WHERE ESTATUS = 'PAGADO')
+		  WHERE ID_VENTA = NEW.ID_VENTA;
+    ELSE
+        UPDATE VENTA SET ID_ESTATUS_VENTA = (SELECT ID_ESTATUS_VENTA FROM estatus_venta WHERE ESTATUS = 'PENDIENTE')
+        WHERE ID_VENTA = NEW.ID_VENTA;
+    END IF;
+END$$
+DELIMITER ;
