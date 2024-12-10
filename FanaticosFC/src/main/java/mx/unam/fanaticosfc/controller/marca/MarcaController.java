@@ -4,7 +4,6 @@ package mx.unam.fanaticosfc.controller.marca;
 import jakarta.validation.Valid;
 import mx.unam.fanaticosfc.model.Marca;
 import mx.unam.fanaticosfc.service.marca.MarcaServiceImpl;
-import mx.unam.fanaticosfc.util.RenderPagina;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;

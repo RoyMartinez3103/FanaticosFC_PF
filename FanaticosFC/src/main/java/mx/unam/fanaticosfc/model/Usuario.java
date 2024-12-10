@@ -51,7 +51,7 @@ public class Usuario {
     )
     private String mail;
     private String username;
-    @Size(min = 8, max = 13, message = "La contraseña debe tener entre 8 y 12 caracteres")
+    //@Size(min = 8, max = 13, message = "La contraseña debe tener entre 8 y 12 caracteres")
     @Column(name = "password")
     private String contrasena;
     @Column(name = "rol")

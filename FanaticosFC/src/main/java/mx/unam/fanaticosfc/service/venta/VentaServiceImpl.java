@@ -7,6 +7,8 @@ import mx.unam.fanaticosfc.service.usuario.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +47,11 @@ public class VentaServiceImpl implements GenericService<Venta,Integer> {
     @Override
     @Transactional
     public void guardar(Venta venta) {
-        Usuario usuario = (usuarioService.buscarPorId(2));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Usuario usuario = usuarioService.buscarPorUsername(username);
 
         venta.setUsuario(usuario);
         usuario.setVentasRealizadas(usuario.getVentasRealizadas()+1);

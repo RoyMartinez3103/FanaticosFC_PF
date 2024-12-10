@@ -20,10 +20,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping("/venta")
 public class VentaController {
+    private static final Logger logger = LoggerFactory.getLogger(VentaController.class);
+
     @Autowired
     VentaCreditoServiceImpl ventaCrService;
     @Autowired
@@ -82,6 +86,7 @@ public class VentaController {
     //Despliega el formulario de venta contado
     @GetMapping("/alta-venta-contado")
     public String altaVentaContado(HttpSession session,Model model){
+        logger.info("Comienza el registro de una venta de contado...");
 
         List<Playera> selectedJerseys = (List<Playera>) session.getAttribute("selectedJerseys");
         System.out.println(selectedJerseys);
@@ -121,7 +126,7 @@ public class VentaController {
     @GetMapping("/alta-venta-credito")
     public String altaVentaCredito(HttpSession session,Model model){
 
-
+        logger.info("Comienza el registro de una venta a crédito.");
         List<Playera> selectedJerseys = (List<Playera>) session.getAttribute("selectedJerseys");
         System.out.println(selectedJerseys);
         VentaCreditoDTO ventaCreditoDTO = new VentaCreditoDTO();
@@ -158,13 +163,14 @@ public class VentaController {
 
     @PostMapping("/cancelar-venta/{id}")
     public String cancelarVenta(@PathVariable Integer id, RedirectAttributes flash){
+
         Venta venta = ventaService.buscarPorId(id);
         venta.setEstatusVenta(estatusVentaService.buscarPorId(3));
 
         ventaService.guardar(venta);
 
         flash.addFlashAttribute("success","La venta se canceló correctamente.");
-
+        logger.info("Se realiza la cancelación de la venta {}.",id);
         return "redirect:/venta/lista-venta";
     }
 
@@ -186,6 +192,7 @@ public class VentaController {
             System.out.println("MontoTotal for: "+montoTotal);
             ventaService.guardar(venta);
             flash.addFlashAttribute("success", "Venta registrada correctamente.");
+            logger.info("Se procesó la venta de contado con id {} correctamente.", venta.getIdVenta());
 
             for (DetalleVenta detalleDTO : ventaDTO.getDetalles()){
                 DetalleVenta detalleVenta = new DetalleVenta();
@@ -196,13 +203,14 @@ public class VentaController {
 
                 Playera playeraVendida = playeraService.buscarPorId(detalleVenta.getPlayera().getIdPlayera());
                 playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
+                logger.info("Se actualiza el stock de la playera {}.",playeraVendida.getIdPlayera());
                 playeraService.guardar(playeraVendida);
             }
             return "redirect:/venta/lista-venta";
 
         } catch (Exception e) {
             flash.addFlashAttribute("error", "Error al guardar la venta.");
-            System.out.println();
+            logger.error("Ocurrió un error al procesar la venta con id {}: {}",venta.getIdVenta(),e.getMessage());
             return "redirect:/venta/alta-venta-contado";
         }
 
@@ -228,6 +236,7 @@ public class VentaController {
             venta.setVentaCredito(true);
             System.out.println("MontoTotal for: "+montoTotal);
             ventaService.guardar(venta);
+            logger.info("Se procesó correctamente la venta a crédito con id {}",venta.getIdVenta());
 
             ventaCredito.setMontoRestante(montoTotal);
             ventaCredito.setDeudor(deudor);
@@ -235,6 +244,7 @@ public class VentaController {
             ventaCredito.setVenta(venta);
 
             ventaCrService.guardar(ventaCredito);
+            logger.info("Se procesó correctamente la venta a crédito con id_credito {}",ventaCredito.getIdVentaCredito());
 
 
             flash.addFlashAttribute("success", "Venta registrada correctamente.");
@@ -248,12 +258,14 @@ public class VentaController {
 
                 Playera playeraVendida = playeraService.buscarPorId(detalleVenta.getPlayera().getIdPlayera());
                 playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
+                logger.info("Se actualiza el stock de la playera {}.",playeraVendida.getIdPlayera());
                 playeraService.guardar(playeraVendida);
             }
             return "redirect:/venta/lista-venta";
 
         } catch (Exception e) {
             flash.addFlashAttribute("error", "Error al guardar la venta.");
+            logger.error("Ocurrió un error al procesar la venta a crédito con id {}: {}",venta.getIdVenta(),e.getMessage());
             return "redirect:/venta/alta-venta-credito";
         }
 

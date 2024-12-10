@@ -31,9 +31,9 @@
         <div class="sidebar-brand-text mx-3">Fanáticos FC</div>
     </a>
     <!-- Divider -->
-    <hr class="sidebar-divider my-0 mb-2">
-    <!-- Contenedor para el elemento del menú -->
     <div sec:authorize="hasRole('ROLE_ADMIN')">
+    <hr class="sidebar-divider my-0 mb-3">
+    <!-- Contenedor para el elemento del menú -->
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" th:href="@{/admin/dashboard}">
@@ -75,7 +75,9 @@
 
     <!-- Nav Item - Listas -->
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="catalogosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="nav-link dropdown-toggle" href="#" id="catalogosDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+           sec:authorize="hasRole('ROLE_ADMIN')">
             <i class="fas fa-fw fa-list"></i>
             <span>Listas</span>
         </a>

@@ -94,7 +94,7 @@ CREATE TABLE USUARIO(
     RFC                 VARCHAR(13)     NOT NULL,
     MAIL                VARCHAR(40)     NOT NULL,
     USERNAME            VARCHAR(20)     NOT NULL,
-    PASSWORD  				VARCHAR(15)     NOT NULL,
+    PASSWORD  				VARCHAR(255)     NOT NULL,
     ROL						VARCHAR(10)		 NOT NULL,
     VENTAS_REALIZADAS   INT             NOT NULL   DEFAULT 0,
     PRIMARY KEY (ID_USUARIO),
@@ -252,11 +252,10 @@ INSERT INTO PLAYERA (COLOR, TALLA, TIPO_MANGA, PRECIO_REAL, STOCK, PRECIO_VENTA,
 ('Negro', 'XG','CORTA', 899,5,1599.0,'/uploads/34d2323a-6c3f-4396-ba54-07c25acbe8db_feyenoord.jpg',2,11);
 
 
-
 INSERT INTO USUARIO (NOMBRE, APELLIDO_PAT, APELLIDO_MAT, FECHA_NAC, RFC, USERNAME, PASSWORD, MAIL, ROL, VENTAS_REALIZADAS) VALUES
-('Ana', 'García', 'López', '1990-01-01', 'GALA9001017D5', 'ana_garcia', 'contrasena123', 'ana_garcia@correo.com', "ADMIN", 3),  -- ADMIN
-('Juan', 'Pérez', 'Martínez', '1985-07-15', 'PEMJ8507159O4', 'juan_perez', 'contrasena456', 'juan_perez@correo.com', "USER", 2),
-('María', 'Gómez', 'Hernández', '2000-12-24', 'GOHM001224R2A', 'maria_gomez', 'contrasena789', 'maria_gomez@correo.com', "USER", 2);
+('Ana', 'García', 'López', '1990-01-01', 'GALA9001017D5', 'ana_garcia', '$2a$12$JVZLD0ZCvKjiveT4.Z/tW.ilsO.AgNd0p4NTlO7UjDXWrVrCJTZk6', 'ana_garcia@correo.com', "ADMIN", 3),  -- ADMIN
+('Juan', 'Pérez', 'Martínez', '1985-07-15', 'PEMJ8507159O4', 'juan_perez', '$2a$12$MHclC1krGAgPUHwNdGr7uOqP1VcCf8LX8ZPCOV0FYzEfiXptoxo6C', 'juan_perez@correo.com', "USER", 2),
+('María', 'Gómez', 'Hernández', '2000-12-24', 'GOHM001224R2A', 'maria_gomez', '$2a$12$ublIab/ToBmgeAD3qqL66OLX19p0f/ZdRSx7eKAvaxpI9ggEXscGC', 'maria_gomez@correo.com', "USER", 2);
 
 
 INSERT INTO ESTATUS_VENTA(ESTATUS,DESCRIPCION) VALUES

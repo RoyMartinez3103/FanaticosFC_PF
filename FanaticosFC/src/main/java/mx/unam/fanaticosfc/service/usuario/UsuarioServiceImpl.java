@@ -4,8 +4,7 @@ import mx.unam.fanaticosfc.model.Usuario;
 import mx.unam.fanaticosfc.repository.UsuarioRepository;
 import mx.unam.fanaticosfc.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +13,15 @@ import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements GenericService<Usuario,Integer> {
+
+    private final PasswordEncoder passwordEncoder;
     
     @Autowired
     UsuarioRepository usuarioRepository;
+
+    public UsuarioServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -31,9 +36,17 @@ public class UsuarioServiceImpl implements GenericService<Usuario,Integer> {
         return opUsuario.orElse(null);
     }
 
+    @Transactional(readOnly = true)
+    public Usuario buscarPorUsername(String username) {
+        Optional<Usuario> opUsuario = usuarioRepository.findByUsername(username);
+        return opUsuario.orElse(null);
+    }
+
     @Override
     @Transactional
     public void guardar(Usuario usuario) {
+        String encryptedPass = passwordEncoder.encode(usuario.getContrasena());
+        usuario.setContrasena(encryptedPass);
         usuarioRepository.save(usuario);
     }
 
