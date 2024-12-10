@@ -95,17 +95,22 @@ public class VentaController {
                 }).toList();
         ventadto.setDetalles(detalleVentas);
 
-        Map<Integer, Map<String, Integer>> tallasDisponibles = new HashMap<>();
+        Map<Integer, Map<String, List<Integer>>> tallasDisponibles = new HashMap<>();
+
         for (Playera playera : selectedJerseys) {
             List<Map<String, Object>> resultados = playeraService.obtenerTallas(playera.getEquipo().getIdEquipo());
-            Map<String,Integer> mapaTallasIds = resultados.stream()
-                    .collect(Collectors.toMap(
-                            resultado -> (String) resultado.get("talla"),  // La talla como clave
-                            resultado -> (Integer) resultado.get("idPlayera") // El ID de la playera como valor
-                    ));
-            tallasDisponibles.put(playera.getIdPlayera(), mapaTallasIds);
-        }
 
+            Map<String, List<Integer>> mapaTallasIds = new HashMap<>();
+
+            for (Map<String, Object> resultado : resultados) {
+                String talla = (String) resultado.get("talla");
+                Integer idPlayera = (Integer) resultado.get("idPlayera");
+
+                mapaTallasIds.computeIfAbsent(talla, k -> new ArrayList<>()).add(idPlayera);
+            }
+            tallasDisponibles.put(playera.getIdPlayera(), mapaTallasIds);
+            System.out.println(tallasDisponibles);
+        }
         model.addAttribute("ventaDTO",ventadto);
         model.addAttribute("selectedJerseys",selectedJerseys);
         model.addAttribute("tallasDisponibles",tallasDisponibles);
@@ -197,6 +202,7 @@ public class VentaController {
 
         } catch (Exception e) {
             flash.addFlashAttribute("error", "Error al guardar la venta.");
+            System.out.println();
             return "redirect:/venta/alta-venta-contado";
         }
 

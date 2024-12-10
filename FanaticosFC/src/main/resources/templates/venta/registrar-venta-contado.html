@@ -42,18 +42,24 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="detalle,iterStat: ${ventaDTO.detalles}">
+                                            <tr th:each="detalle, iterStat: ${ventaDTO.detalles}">
                                                 <td th:text="${selectedJerseys[iterStat.index].equipo.nombre}"></td>
                                                 <td th:text="${selectedJerseys[iterStat.index].marca.nombre}"></td>
                                                 <td th:text="${selectedJerseys[iterStat.index].color}"></td>
-                                                 <td>
-                                                     <select th:field="*{detalles[__${iterStat.index}__].playera}" class="form-control">
-                                                         <option th:each="entry : ${tallasDisponibles[selectedJerseys[iterStat.index].idPlayera]}"
-                                                                 th:value="${entry.value}"
-                                                                 th:text="${entry.key}">
-                                                         </option>
-                                                     </select>
-                                                 </td>
+                                                <td>
+                                                    <select th:field="*{detalles[__${iterStat.index}__].playera}" class="form-control">
+                                                        <th:block th:each="entry : ${tallasDisponibles[selectedJerseys[iterStat.index].idPlayera]}">
+                                                            <th:block th:each="idPlayera : ${entry.value}">
+                                                                <option th:value="${idPlayera}"
+                                                                        th:text="${entry.key + ' (ID: ' + idPlayera + ')'}">
+                                                                </option>
+                                                            </th:block>
+                                                        </th:block>
+                                                    </select>
+
+
+
+                                                </td>
                                                 <td>
                                                     <input type="number"
                                                            th:field="*{detalles[__${iterStat.index}__].cantidadPlayeras}"
@@ -64,8 +70,16 @@
                                                            onchange="updateSubtotal(this)">
                                                 </td>
                                                 <td th:text="${'$ ' + selectedJerseys[iterStat.index].precioVenta}"></td>
-                                                <td id="subtotal-${iterStat.index}">0.00</td> <!-- Subtotal calculado en frontend -->
+                                                <td id="subtotal-${iterStat.index}">0.00</td>
+                                                <td>
+                                                    <!-- Botón para duplicar la fila -->
+                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="duplicateRow(this)">
+                                                        <i class="fas fa-copy"></i> Duplicar
+                                                    </button>
+                                                </td>
                                             </tr>
+
+
                                             </tbody>
                                             <tfoot>
                                         <tr>
@@ -105,6 +119,35 @@
 
 <!-- Scripts -->
 <script>
+    function duplicateRow(button) {
+    // Obtener la fila que contiene el botón
+    const row = button.closest('tr');
+
+    // Duplicar la fila
+    const newRow = row.cloneNode(true);
+
+    // Restablecer los valores específicos en los elementos duplicados
+    const cantidadInput = newRow.querySelector('.cantidad-input');
+    if (cantidadInput) {
+        cantidadInput.value = 1; // Restablecer la cantidad a 1
+        cantidadInput.addEventListener('change', function () {
+            updateSubtotal(this);
+        });
+    }
+
+    const subtotalCell = newRow.querySelector('[id^="subtotal-"]');
+    if (subtotalCell) {
+        subtotalCell.textContent = parseFloat(input.getAttribute('data-preciounitario')); // Restablecer el subtotal a 0
+    }
+
+    // Agregar la nueva fila al final del tbody
+    const tbody = row.closest('tbody');
+    tbody.appendChild(newRow);
+
+    // Actualizar el total
+    updateTotal();
+}
+
     function updateSubtotal(input) {
     // Obtener la fila que contiene el input
     const row = input.closest('tr');
@@ -151,6 +194,8 @@ function updateTotal() {
     // Mostrar el total en la celda correspondiente
     document.getElementById('total').textContent = total.toFixed(2); // Mostrar el total con dos decimales
 }
+
+
 </script>
 
 

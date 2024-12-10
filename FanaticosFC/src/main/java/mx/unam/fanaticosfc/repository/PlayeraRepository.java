@@ -13,6 +13,11 @@ public interface PlayeraRepository extends JpaRepository<Playera,Integer>{
             "FROM Playera p JOIN p.equipo e WHERE e.id = :idEquipo")
     List<Map<String, Object>> findTallasByEquipoId(@Param("idEquipo") Integer idEquipo);
 
+    @Query(value = "SELECT * FROM playera WHERE id_equipo = :idEquipo", nativeQuery = true)
+    List<Playera> obtenerPlayerasPorEquipo(@Param("idEquipo") Integer idEquipo);
+
+
+
 }
 
 

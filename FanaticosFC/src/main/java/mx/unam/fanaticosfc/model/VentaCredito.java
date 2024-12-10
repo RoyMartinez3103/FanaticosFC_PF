@@ -15,7 +15,6 @@ public class VentaCredito {
     @Column(name = "id_venta_credito")
     private Integer idVentaCredito;
 
-    @DecimalMin(value = "0.0",inclusive = false, message = "El monto debe ser menor a cero")
     @Column(name = "monto_restante")
     private BigDecimal montoRestante;
 

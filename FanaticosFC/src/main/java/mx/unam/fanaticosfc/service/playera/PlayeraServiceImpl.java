@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,6 +51,10 @@ public class PlayeraServiceImpl implements GenericService<Playera,Integer> {
 
     public List<Map<String,Object>> obtenerTallas(Integer idEquipo){
         return playeraRepository.findTallasByEquipoId(idEquipo);
+    }
+
+    public List<Playera> playerasPorEquipo(Integer idEquipo){
+        return playeraRepository.obtenerPlayerasPorEquipo(idEquipo);
     }
 
 }
