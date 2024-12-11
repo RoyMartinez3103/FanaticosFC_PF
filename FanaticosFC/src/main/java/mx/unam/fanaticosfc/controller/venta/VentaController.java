@@ -1,7 +1,6 @@
 package mx.unam.fanaticosfc.controller.venta;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import mx.unam.fanaticosfc.dto.VentaCreditoDTO;
 import mx.unam.fanaticosfc.dto.VentaDTO;
 import mx.unam.fanaticosfc.model.*;
@@ -20,14 +19,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping("/venta")
 public class VentaController {
-    private static final Logger logger = LoggerFactory.getLogger(VentaController.class);
-
     @Autowired
     VentaCreditoServiceImpl ventaCrService;
     @Autowired
@@ -64,14 +59,14 @@ public class VentaController {
 
     //Con las playeras seleccionadas, se dirige a la venta seleccionada
     @PostMapping("/seleccionar-tipo")
-    public String tipoVenta(@Valid @RequestParam("selectedJerseys") List<Playera> selectedJerseys,
+    public String tipoVenta(@RequestParam(value = "selectedJerseys",defaultValue = "") List<Playera> selectedJerseys,
                             @RequestParam("tipo") String tipo,
                             HttpSession session,
-                            Model model) {
+                            RedirectAttributes flash) {
 
         if (selectedJerseys == null || selectedJerseys.isEmpty()) {
-            model.addAttribute("error", "Debe seleccionar al menos una playera");
-            return "/venta/seleccion-playeras";
+            flash.addFlashAttribute("error", "Debe seleccionar al menos una playera");
+            return "redirect:/venta/seleccionar-tipo";
         }
         session.setAttribute("selectedJerseys", selectedJerseys);
 
@@ -85,11 +80,9 @@ public class VentaController {
 
     //Despliega el formulario de venta contado
     @GetMapping("/alta-venta-contado")
-    public String altaVentaContado(HttpSession session,Model model){
-        logger.info("Comienza el registro de una venta de contado...");
+    public String altaVentaContado(HttpSession session,Model model,RedirectAttributes flash){
 
         List<Playera> selectedJerseys = (List<Playera>) session.getAttribute("selectedJerseys");
-        System.out.println(selectedJerseys);
         VentaDTO ventadto = new VentaDTO();
         List<DetalleVenta> detalleVentas = selectedJerseys.stream()
                 .map(playera -> {
@@ -100,22 +93,17 @@ public class VentaController {
                 }).toList();
         ventadto.setDetalles(detalleVentas);
 
-        Map<Integer, Map<String, List<Integer>>> tallasDisponibles = new HashMap<>();
-
+        Map<Integer, Map<String, Integer>> tallasDisponibles = new HashMap<>();
         for (Playera playera : selectedJerseys) {
-            List<Map<String, Object>> resultados = playeraService.obtenerTallas(playera.getEquipo().getIdEquipo());
-
-            Map<String, List<Integer>> mapaTallasIds = new HashMap<>();
-
-            for (Map<String, Object> resultado : resultados) {
-                String talla = (String) resultado.get("talla");
-                Integer idPlayera = (Integer) resultado.get("idPlayera");
-
-                mapaTallasIds.computeIfAbsent(talla, k -> new ArrayList<>()).add(idPlayera);
-            }
+            List<Map<String, Object>> resultados = playeraService.obtenerTallas(playera.getEquipo().getIdEquipo(),playera.getColor());
+            Map<String,Integer> mapaTallasIds = resultados.stream()
+                    .collect(Collectors.toMap(
+                            resultado -> (String) resultado.get("talla"),  // La talla como clave
+                            resultado -> (Integer) resultado.get("idPlayera") // El ID de la playera como valor
+                    ));
             tallasDisponibles.put(playera.getIdPlayera(), mapaTallasIds);
-            System.out.println(tallasDisponibles);
         }
+
         model.addAttribute("ventaDTO",ventadto);
         model.addAttribute("selectedJerseys",selectedJerseys);
         model.addAttribute("tallasDisponibles",tallasDisponibles);
@@ -126,9 +114,8 @@ public class VentaController {
     @GetMapping("/alta-venta-credito")
     public String altaVentaCredito(HttpSession session,Model model){
 
-        logger.info("Comienza el registro de una venta a crédito.");
+
         List<Playera> selectedJerseys = (List<Playera>) session.getAttribute("selectedJerseys");
-        System.out.println(selectedJerseys);
         VentaCreditoDTO ventaCreditoDTO = new VentaCreditoDTO();
         List<Deudor> deudores = deudorService.listarTodos();
 
@@ -143,11 +130,11 @@ public class VentaController {
 
         Map<Integer, Map<String, Integer>> tallasDisponibles = new HashMap<>();
         for (Playera playera : selectedJerseys) {
-            List<Map<String, Object>> resultados = playeraService.obtenerTallas(playera.getEquipo().getIdEquipo());
+            List<Map<String, Object>> resultados = playeraService.obtenerTallas(playera.getEquipo().getIdEquipo(), playera.getColor());
             Map<String,Integer> mapaTallasIds = resultados.stream()
                     .collect(Collectors.toMap(
                             resultado -> (String) resultado.get("talla"),  // La talla como clave
-                            resultado -> (Integer) resultado.get("idPlayera") // El ID de la playera como valor
+                            resultado -> (Integer) resultado.get("idPlayera")// El ID de la playera como valor
                     ));
             tallasDisponibles.put(playera.getIdPlayera(), mapaTallasIds);
         }
@@ -163,14 +150,13 @@ public class VentaController {
 
     @PostMapping("/cancelar-venta/{id}")
     public String cancelarVenta(@PathVariable Integer id, RedirectAttributes flash){
-
         Venta venta = ventaService.buscarPorId(id);
         venta.setEstatusVenta(estatusVentaService.buscarPorId(3));
 
         ventaService.guardar(venta);
 
         flash.addFlashAttribute("success","La venta se canceló correctamente.");
-        logger.info("Se realiza la cancelación de la venta {}.",id);
+
         return "redirect:/venta/lista-venta";
     }
 
@@ -180,7 +166,6 @@ public class VentaController {
         BigDecimal montoTotal = BigDecimal.ZERO;
 
         venta.setFechaVenta(LocalDateTime.now());
-        System.out.println("MontoTotal get: "+venta.getMontoTotal());
         try{
             for (DetalleVenta detalleVenta: ventaDTO.getDetalles()){
                 BigDecimal subTotal = detalleVenta.getPlayera().getPrecioVenta().multiply(BigDecimal.valueOf(detalleVenta.getCantidadPlayeras()));
@@ -189,10 +174,8 @@ public class VentaController {
             }
             venta.setMontoTotal(montoTotal);
             ventaDTO.setMontoTotal(montoTotal);
-            System.out.println("MontoTotal for: "+montoTotal);
             ventaService.guardar(venta);
             flash.addFlashAttribute("success", "Venta registrada correctamente.");
-            logger.info("Se procesó la venta de contado con id {} correctamente.", venta.getIdVenta());
 
             for (DetalleVenta detalleDTO : ventaDTO.getDetalles()){
                 DetalleVenta detalleVenta = new DetalleVenta();
@@ -203,14 +186,12 @@ public class VentaController {
 
                 Playera playeraVendida = playeraService.buscarPorId(detalleVenta.getPlayera().getIdPlayera());
                 playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
-                logger.info("Se actualiza el stock de la playera {}.",playeraVendida.getIdPlayera());
                 playeraService.guardar(playeraVendida);
             }
             return "redirect:/venta/lista-venta";
 
         } catch (Exception e) {
             flash.addFlashAttribute("error", "Error al guardar la venta.");
-            logger.error("Ocurrió un error al procesar la venta con id {}: {}",venta.getIdVenta(),e.getMessage());
             return "redirect:/venta/alta-venta-contado";
         }
 
@@ -221,8 +202,6 @@ public class VentaController {
         Venta venta = new Venta();
         VentaCredito ventaCredito = new VentaCredito();
         Deudor deudor = deudorService.buscarPorId(ventaDTO.getDeudor().getIdDeudor());
-        System.out.println(deudor);
-
         BigDecimal montoTotal = BigDecimal.ZERO;
 
         venta.setFechaVenta(LocalDateTime.now());
@@ -234,9 +213,7 @@ public class VentaController {
 
             venta.setMontoTotal(montoTotal);
             venta.setVentaCredito(true);
-            System.out.println("MontoTotal for: "+montoTotal);
             ventaService.guardar(venta);
-            logger.info("Se procesó correctamente la venta a crédito con id {}",venta.getIdVenta());
 
             ventaCredito.setMontoRestante(montoTotal);
             ventaCredito.setDeudor(deudor);
@@ -244,7 +221,6 @@ public class VentaController {
             ventaCredito.setVenta(venta);
 
             ventaCrService.guardar(ventaCredito);
-            logger.info("Se procesó correctamente la venta a crédito con id_credito {}",ventaCredito.getIdVentaCredito());
 
 
             flash.addFlashAttribute("success", "Venta registrada correctamente.");
@@ -258,14 +234,12 @@ public class VentaController {
 
                 Playera playeraVendida = playeraService.buscarPorId(detalleVenta.getPlayera().getIdPlayera());
                 playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
-                logger.info("Se actualiza el stock de la playera {}.",playeraVendida.getIdPlayera());
                 playeraService.guardar(playeraVendida);
             }
             return "redirect:/venta/lista-venta";
 
         } catch (Exception e) {
             flash.addFlashAttribute("error", "Error al guardar la venta.");
-            logger.error("Ocurrió un error al procesar la venta a crédito con id {}: {}",venta.getIdVenta(),e.getMessage());
             return "redirect:/venta/alta-venta-credito";
         }
 

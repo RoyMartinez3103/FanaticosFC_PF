@@ -42,7 +42,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="detalle,iterStat: ${ventaDTO.detalles}">
+                                            <tr th:each="detalle, iterStat: ${ventaDTO.detalles}" id="row-${iterStat.index}">
                                                 <td th:text="${selectedJerseys[iterStat.index].equipo.nombre}"></td>
                                                 <td th:text="${selectedJerseys[iterStat.index].marca.nombre}"></td>
                                                 <td th:text="${selectedJerseys[iterStat.index].color}"></td>
@@ -64,9 +64,18 @@
                                                            onchange="updateSubtotal(this)">
                                                 </td>
                                                 <td th:text="${'$ ' + selectedJerseys[iterStat.index].precioVenta}"></td>
-                                                <td id="subtotal-${iterStat.index}"></td> <!-- Subtotal calculado en frontend -->
+                                                <td id="subtotal-${iterStat.index}">0.00</td> <!-- Subtotal calculado en frontend -->
+                                                <td>
+                                                    <button type="button" class="btn btn-success btn-sm" onclick="duplicateRow(this)">
+                                                        <i class="fas fa-copy"></i> Duplicar
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(this)">
+                                                        <i class="fas fa-trash-alt"></i> Eliminar
+                                                    </button>
+                                                </td>
                                             </tr>
                                             </tbody>
+
                                             <tfoot>
                                             <tr>
                                                 <td colspan="6" class="text-right"><strong>Total:</strong></td>
@@ -113,6 +122,42 @@
 </a>
 
 <!-- Scripts -->
+<script>
+    function duplicateRow(button) {
+        const row = button.closest('tr');
+        const clonedRow = row.cloneNode(true);
+        const rows = document.querySelectorAll('tbody tr');
+        const newIndex = rows.length;
+
+        clonedRow.id = `row-${newIndex}`;
+        clonedRow.querySelectorAll('[id]').forEach(cell => {
+            if (cell.id.startsWith('subtotal-')) {
+                cell.id = `subtotal-${newIndex}`;
+            }
+        });
+
+        clonedRow.querySelectorAll('input, select').forEach(input => {
+            const name = input.getAttribute('name');
+            if (name) {
+                input.setAttribute('name', name.replace(/\[\d+\]/, `[${newIndex}]`));
+            }
+        });
+
+        row.parentNode.appendChild(clonedRow);
+    }
+
+    function deleteRow(button) {
+        const row = button.closest('tr');
+        const tbody = row.parentNode;
+
+        // Eliminar la fila del DOM
+        tbody.removeChild(row);
+
+        // Actualizar el total después de eliminar una fila
+        updateTotal();
+    }
+</script>
+
 <script>
     function updateSubtotal(input) {
     // Obtener la fila que contiene el input

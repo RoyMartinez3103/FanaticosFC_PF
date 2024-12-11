@@ -5,20 +5,20 @@
 <link rel="stylesheet" th:href="@{/css/cards.css}">
 
 <body>
-
 <form th:action="@{/venta/seleccionar-tipo}" method="post">
-  <div th:if="${error}" class="alert alert-danger text-center">
-    <p th:text="${error}"></p>
+  <div th:replace="~{layout/layout :: alerts}"></div>
+  <div class="col-md-4 text-left">
+    <a th:href="@{/}" class="btn btn-secondary mr-2">
+      <i class="fas fa-arrow-left"></i> Volver
+    </a>
   </div>
-
   <div class="grid-container">
     <div class="jersey-card" th:each="jersey : ${jerseys}">
       <div class="checkbox-container">
         <input type="checkbox"
                th:value="${jersey.idPlayera}"
                name="selectedJerseys"
-               class="custom-checkbox"
-                value="">
+               class="custom-checkbox">
       </div>
       <div class="img-container">
         <img class="img-playera"
@@ -48,7 +48,6 @@
         <button type="submit" name="tipo" value="credito" class="btn btn-secondary btn-lg m-2">
           <i class="fas fa-credit-card"></i> Venta a Crédito
         </button>
-
       </div>
     </div>
   </div>
