@@ -108,7 +108,6 @@
 
                 <!-- Content Row -->
                 <div class="row">
-
                     <!-- Area Chart -->
                     <div class="col-xl-8 col-lg-7">
                         <div class="card shadow mb-4">
@@ -139,8 +138,9 @@
                         </div>
                     </div>
 
-                    <!-- Donut Chart -->
+                    <!-- Right Column -->
                     <div class="col-xl-4 col-lg-5">
+                        <!-- Donut Chart 1 -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Tallas más vendidas</h6>
@@ -149,14 +149,26 @@
                                 <div class="chart-pie pt-4">
                                     <canvas id="myPieChart"></canvas>
                                 </div>
-                                <<hr style="margin-top: 70px;">
+                                <hr style="margin-top: 70px;">
                                 <p style="margin-top: 10px;">Se muestran las tallas más vendidas.</p>
                             </div>
                         </div>
+
+                        <!-- Donut Chart 2 -->
+                        <div class="card shadow mb-4" style="margin-top: 70px;"> <!-- Ajustar el espacio superior -->
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Tipos de ventas realizados</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-pie pt-4">
+                                    <canvas id="myPieChart2"></canvas>
+                                </div>
+                                <hr style="margin-top: 70px;">
+                                <p style="margin-top: 10px;">Comparativa de tipos de venta realizados.</p>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-
             </div>
             <!-- /.container-fluid -->
 
@@ -183,8 +195,16 @@
     console.log("Tallas:", tallas);
     console.log("tvendidas:", tvendidas);
 </script>
-
 <script th:src="@{/js/demo/chart-pie-demo.js}"></script>
+
+<script th:inline="javascript">
+    const tiposVentas = /*[[${tiposVentas}]]*/ [];
+    const veces = /*[[${veces}]]*/ [];
+
+    console.log("Veces:", veces);
+    console.log("Tipos:", tiposVentas);
+</script>
+<script th:src="@{/js/demo/chart-pie-demo2.js}"></script>
 
 <script th:inline="javascript">
     const nombres = /*[[${nombres}]]*/ [];

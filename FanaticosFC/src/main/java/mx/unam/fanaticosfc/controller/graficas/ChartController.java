@@ -75,14 +75,29 @@ public class ChartController {
         model.addAttribute("tallas",tallas);
         model.addAttribute("tvendidas",tvendidas);
 
+        // GRAFICA DE DONA 2 //
+        List<Object[]> tiposDeVentas = ventaRepository.getTiposVentas();
+        List<String> tipos = new ArrayList<>();
+        List<Long> vecesRealizadas = new ArrayList<>();
+
+        for(Object[] objs : tiposDeVentas){
+            String tipoV = (String) objs[0];
+            Long veces = (Long) objs[1];
+
+            tipos.add(tipoV);
+            vecesRealizadas.add(veces);
+        }
+
+        model.addAttribute("tiposVentas",tipos);
+        model.addAttribute("veces",vecesRealizadas);
+        System.out.println("Tipos: "+tipos+ "Veces: "+vecesRealizadas);
+
         // TARJETAS //
         BigDecimal gananciaMes = ventaRepository.gananciaMes();
         model.addAttribute("gananciaMes",gananciaMes);
-        System.out.println(gananciaMes);//********************************************************
 
         Integer ventasMes = ventaRepository.ventasMes();
         model.addAttribute("ventasMes",ventasMes);
-        System.out.println(ventasMes);//*******************************************************************
 
         List<Object[]> playeraMasVendida = detalleRepository.getPlayeraMasVendida();
         String equipo;

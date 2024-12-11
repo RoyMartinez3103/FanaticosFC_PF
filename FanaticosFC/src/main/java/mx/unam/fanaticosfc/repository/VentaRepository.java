@@ -21,7 +21,7 @@ public interface VentaRepository extends JpaRepository<Venta,Integer> {
     @Query("SELECT MONTH(fechaVenta),SUM(montoTotal) " +
             "FROM Venta v WHERE YEAR(fechaVenta) = :anio " +
             "GROUP BY MONTH(fechaVenta) ORDER BY MONTH(fechaVenta)")
-    List<Object[]> getGananciasMes(@Param("anio")Integer anio);
+    List<Object[]> getGananciasMes(@Param("anio") Integer anio);
 
     @Query("SELECT SUM(montoTotal) " +
             "FROM Venta " +
@@ -34,7 +34,7 @@ public interface VentaRepository extends JpaRepository<Venta,Integer> {
             "JOIN usuario u ON v.ID_USUARIO=u.ID_USUARIO " +
             "WHERE MONTH(fecha_venta) = MONTH(CURDATE()) " +
             "GROUP BY u.nombre " +
-            "ORDER BY ventas DESC LIMIT 1",nativeQuery = true)
+            "ORDER BY ventas DESC LIMIT 1", nativeQuery = true)
     List<Object[]> getEmpleadoDelMes();
 
     @Query("SELECT COUNT(*) " +
@@ -42,5 +42,14 @@ public interface VentaRepository extends JpaRepository<Venta,Integer> {
             "WHERE MONTH(fechaVenta) = MONTH(CURDATE())")
     Integer ventasMes();
 
+    @Query(value = "SELECT " +
+            "CASE " +
+            "WHEN es_venta_credito = 0 THEN 'Contado'" +
+            " WHEN es_venta_credito = 1 THEN 'Crédito' " +
+            "END AS Tipo_de_Venta, " +
+            "COUNT(es_venta_credito) AS Ventas " +
+            "FROM venta " +
+            "GROUP BY es_venta_credito",nativeQuery = true)
+    List<Object[]> getTiposVentas();
 
 }
