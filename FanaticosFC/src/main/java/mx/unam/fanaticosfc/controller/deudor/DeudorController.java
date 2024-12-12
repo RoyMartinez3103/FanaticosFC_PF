@@ -1,8 +1,11 @@
 package mx.unam.fanaticosfc.controller.deudor;
 
 import jakarta.validation.Valid;
+import mx.unam.fanaticosfc.controller.equipo.EquipoController;
 import mx.unam.fanaticosfc.model.Deudor;
 import mx.unam.fanaticosfc.service.deudor.DeudorServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -14,16 +17,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/deudor")
 public class DeudorController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DeudorController.class);
+
     @Autowired
     DeudorServiceImpl deudorService;
-
 
     @GetMapping("/lista-deudor")
     public String listaDeudor(Model model){
         model.addAttribute("deudor",deudorService.listarTodos());
         return "/deudor/lista-deudor";
     }
-
 
     @GetMapping("/alta-deudor")
     public String altaDeudor(Model model){
@@ -45,8 +49,8 @@ public class DeudorController {
         }
 
         deudorService.guardar(deudor);
-        System.out.println(deudor);
         flash.addFlashAttribute("success", "El deudor se guardó correctamente");
+        logger.info("Se guardó un nuevo Deudor con ID: " + deudor.getIdDeudor());
 
         return "redirect:/deudor/lista-deudor";
     }
@@ -56,10 +60,12 @@ public class DeudorController {
         try {
             deudorService.borrar(id);
             flash.addFlashAttribute("success", "El deudor se borró correctamente.");
+            logger.info("Se eliminó el Deudor con ID: " + id);
         } catch (DataIntegrityViolationException e) {
             // Este error ocurre cuando hay violación de integridad referencial
             flash.addFlashAttribute("error",
                     "No se puede eliminar el deudor porque tiene pagos pendientes.");
+            logger.error("Error al eliminar el Deudor con ID: {} por pagos pendientes",id);
         } catch (Exception e) {
             // Para cualquier otro error inesperado
             flash.addFlashAttribute("error", "Ocurrió un error al intentar eliminar el deudor.");
@@ -73,6 +79,7 @@ public class DeudorController {
         model.addAttribute("deudor",deudor);
         model.addAttribute("contenido","Modificar Deudor");
         model.addAttribute("subtitulo","Formulario para modificar una deudor existente.");
+        logger.info("Se editó el Deudor con ID: " + id);
         return "/deudor/alta-deudor";
     }
 }

@@ -39,10 +39,6 @@ public class PagosCreditoServiceImpl implements GenericService<PagosCredito,Inte
 
         VentaCredito ventaCredito = creditoService.buscarPorId(pago.getVentaCredito().getIdVentaCredito());
 
-        if(pago.getMonto().compareTo(ventaCredito.getMontoRestante()) > 0){
-            throw new IllegalArgumentException("El pago no puede ser mayor al monto restante");
-        }
-
         BigDecimal nuevoRestante = ventaCredito.getMontoRestante().subtract(pago.getMonto());
         ventaCredito.setMontoRestante(nuevoRestante);
 

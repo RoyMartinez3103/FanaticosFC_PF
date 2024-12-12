@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +39,7 @@ public class ChartController {
         model.addAttribute("montos",ventas);
 
         // GRAFICA DE AREA //
-
-        //anio= LocalDateTime.now().getYear();
         List<Object[]> gananciasMensuales = ventaRepository.getGananciasMes(anio);
-
         List<String> meses = new ArrayList<>();
         List<BigDecimal> ganancias = new ArrayList<>();
 
@@ -90,7 +86,6 @@ public class ChartController {
 
         model.addAttribute("tiposVentas",tipos);
         model.addAttribute("veces",vecesRealizadas);
-        System.out.println("Tipos: "+tipos+ "Veces: "+vecesRealizadas);
 
         // TARJETAS //
         BigDecimal gananciaMes = ventaRepository.gananciaMes();

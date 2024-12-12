@@ -1,12 +1,15 @@
 package mx.unam.fanaticosfc.controller.playera;
 
 import jakarta.validation.Valid;
+import mx.unam.fanaticosfc.controller.deudor.DeudorController;
 import mx.unam.fanaticosfc.model.Equipo;
 import mx.unam.fanaticosfc.model.Marca;
 import mx.unam.fanaticosfc.model.Playera;
 import mx.unam.fanaticosfc.service.equipo.EquipoServiceImpl;
 import mx.unam.fanaticosfc.service.marca.MarcaServiceImpl;
 import mx.unam.fanaticosfc.service.playera.PlayeraServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -26,6 +29,8 @@ import java.util.*;
 @Controller
 @RequestMapping("/playera")
 public class PlayeraController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PlayeraController.class);
 
     @Autowired
     PlayeraServiceImpl playeraService;
@@ -70,7 +75,6 @@ public class PlayeraController {
                 String nombreArchivo = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
                 Path rutaArchivo = rutaDirectorio.resolve(nombreArchivo);
                 Files.copy(imageFile.getInputStream(), rutaArchivo, StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Archivo guardado en: " + rutaArchivo.toAbsolutePath());
 
                 playera.setImagenRuta("/uploads/" + nombreArchivo);
             }
@@ -79,7 +83,6 @@ public class PlayeraController {
             } else {
                 System.out.println("El archivo no se recibió correctamente.");
             }
-
 
             List<Equipo> equipos = equipoService.listarTodos();
             List<Marca> marcas = marcaService.listarTodos();
@@ -92,10 +95,10 @@ public class PlayeraController {
                 System.out.println("errores: " + result.getAllErrors());
                 return "/playera/alta-playera";
             }
-            System.out.println("Ruta almacenada "+ playera.getImagenRuta());
 
             playeraService.guardar(playera);
             flash.addFlashAttribute("success", "La playera se guardó correctamente");
+            logger.info("Se guardó correctamente una Playera con ID: " + playera.getIdPlayera());
             return "redirect:/playera/lista-playera";
 
         }catch (Exception e){
@@ -109,10 +112,12 @@ public class PlayeraController {
         try {
             playeraService.borrar(id);
             flash.addFlashAttribute("success", "La playera se borró correctamente.");
+            logger.info("Se borró la playera con ID:"+id);
         } catch (DataIntegrityViolationException e) {
             // Este error ocurre cuando hay violación de integridad referencial
             flash.addFlashAttribute("error",
                     "No se puede eliminar la playera.");
+            logger.error("Error al borrar la playera con ID: "+id);
         } catch (Exception e) {
             // Para cualquier otro error inesperado
             flash.addFlashAttribute("error", "Ocurrió un error al intentar eliminar la playera.");
@@ -131,21 +136,8 @@ public class PlayeraController {
         model.addAttribute("playera",playera);
         model.addAttribute("contenido","Modificar Playera");
         model.addAttribute("subtitulo","Formulario para modificar una playera existente.");
+        logger.info("Se modificó la playera con ID: "+id);
         return "/playera/alta-playera";
-    }
-
-    @GetMapping("/mostrar-playeras")
-    public String mostrarPlayeras(Model model){
-        List<Playera> playeras = playeraService.listarTodos();
-        // Crear un Set para almacenar combinaciones únicas de color e idEquipo
-        Set<String> uniqueJerseys = new HashSet<>();
-
-        // Filtrar la lista
-        List<Playera> filteredJerseys = playeras.stream()
-                .filter(playera -> uniqueJerseys.add(playera.getColor() + "-" + playera.getEquipo().getIdEquipo() + "-" + playera.getTipoManga()))
-                .toList();
-        model.addAttribute("jerseys",filteredJerseys);
-        return "/playera/mostrar-playeras";
     }
     
 }

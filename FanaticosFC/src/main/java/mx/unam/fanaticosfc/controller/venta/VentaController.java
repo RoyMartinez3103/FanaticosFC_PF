@@ -1,6 +1,7 @@
 package mx.unam.fanaticosfc.controller.venta;
 
 import jakarta.servlet.http.HttpSession;
+import mx.unam.fanaticosfc.controller.usuario.UsuarioController;
 import mx.unam.fanaticosfc.dto.VentaCreditoDTO;
 import mx.unam.fanaticosfc.dto.VentaDTO;
 import mx.unam.fanaticosfc.model.*;
@@ -10,6 +11,8 @@ import mx.unam.fanaticosfc.service.estatusVenta.EstatusVentaServiceImpl;
 import mx.unam.fanaticosfc.service.playera.PlayeraServiceImpl;
 import mx.unam.fanaticosfc.service.venta.VentaServiceImpl;
 import mx.unam.fanaticosfc.service.ventaCredito.VentaCreditoServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/venta")
 public class VentaController {
+    private static final Logger logger = LoggerFactory.getLogger(VentaController.class);
     @Autowired
     VentaCreditoServiceImpl ventaCrService;
     @Autowired
@@ -40,7 +44,7 @@ public class VentaController {
     @GetMapping("/lista-venta")
     public String listaVenta(Model model){
         model.addAttribute("venta",ventaService.listarTodos());
-        return "/venta/lista-venta"; //se retorna el html
+        return "/venta/lista-venta";
     }
 
     //Se despliega la vista de las playeras a seleccionar
@@ -71,6 +75,7 @@ public class VentaController {
         session.setAttribute("selectedJerseys", selectedJerseys);
 
         if ("contado".equals(tipo)) {
+
             return "redirect:/venta/alta-venta-contado";
         } else {
             return "redirect:/venta/alta-venta-credito";
@@ -188,6 +193,7 @@ public class VentaController {
                 playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
                 playeraService.guardar(playeraVendida);
             }
+            logger.info("Se inicia registró una venta de contado ID: {}.",venta.getIdVenta());
             return "redirect:/venta/lista-venta";
 
         } catch (Exception e) {
@@ -236,7 +242,9 @@ public class VentaController {
                 playeraVendida.setStock(playeraVendida.getStock()-detalleVenta.getCantidadPlayeras());
                 playeraService.guardar(playeraVendida);
             }
+            logger.info("Se registró una venta a crédito con ID: {}.",venta.getIdVenta());
             return "redirect:/venta/lista-venta";
+
 
         } catch (Exception e) {
             flash.addFlashAttribute("error", "Error al guardar la venta.");

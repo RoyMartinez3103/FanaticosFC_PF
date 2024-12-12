@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private static final Logger logger = LoggerFactory.getLogger(EquipoController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
     private final UsuarioRepository usuarioRepository;
 
     @Override

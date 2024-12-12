@@ -1,14 +1,12 @@
 package mx.unam.fanaticosfc.controller.marca;
 
-
 import jakarta.validation.Valid;
 import mx.unam.fanaticosfc.model.Marca;
 import mx.unam.fanaticosfc.service.marca.MarcaServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/marca")
 public class MarcaController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MarcaController.class);
     
     @Autowired
     MarcaServiceImpl marcaService;
@@ -48,8 +48,8 @@ public class MarcaController {
         }
 
         marcaService.guardar(marca);
-        System.out.println(marca);
         flash.addFlashAttribute("success", "La marca se guardó correctamente");
+        logger.info("Se guardó una nueva Marca con ID: " + marca.getIdMarca());
 
         return "redirect:/marca/lista-marca";
     }
@@ -59,10 +59,12 @@ public class MarcaController {
         try {
             marcaService.borrar(id);
             flash.addFlashAttribute("success", "La marca se borró correctamente.");
+            logger.info("Se borró la Marca con ID: " + id);
         } catch (DataIntegrityViolationException e) {
             // Este error ocurre cuando hay violación de integridad referencial
             flash.addFlashAttribute("error",
                     "No se puede eliminar la marca porque está registrada con una playera.");
+            logger.error("Error al eliminar la Marca con ID: {} porque está ligada a una playera",id);
         } catch (Exception e) {
             // Para cualquier otro error inesperado
             flash.addFlashAttribute("error", "Ocurrió un error al intentar eliminar la marca.");
@@ -76,6 +78,7 @@ public class MarcaController {
         model.addAttribute("marca",marca);
         model.addAttribute("contenido","Modificar Marca");
         model.addAttribute("subtitulo","Formulario para modificar una marca existente.");
+        logger.info("Se editó la Marca con ID: "+id);
         return "/marca/alta-marca";
     }
 }

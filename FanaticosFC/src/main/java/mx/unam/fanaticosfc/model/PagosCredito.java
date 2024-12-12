@@ -19,8 +19,7 @@ public class PagosCredito {
     @Column(name = "fecha_pago")
     private LocalDateTime fechaPago;
 
-    @Digits(integer = 4,fraction = 2,message = "Valor incorrecto, se esparaba [4].[2] dígitos.")
-    @DecimalMin(value = "0.0",inclusive = false, message = "El monto debe ser mayor a cero")
+    @DecimalMin(value = "0",inclusive = false, message = "El monto debe ser mayor a cero")
     @Column(name = "monto_pago")
     private BigDecimal monto;
 
