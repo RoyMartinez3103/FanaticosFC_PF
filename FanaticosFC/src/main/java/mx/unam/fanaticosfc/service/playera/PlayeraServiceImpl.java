@@ -53,8 +53,5 @@ public class PlayeraServiceImpl implements GenericService<Playera,Integer> {
         return playeraRepository.findTallasByEquipoId(idEquipo,color);
     }
 
-    public List<Playera> playerasPorEquipo(Integer idEquipo){
-        return playeraRepository.obtenerPlayerasPorEquipo(idEquipo);
-    }
 
 }

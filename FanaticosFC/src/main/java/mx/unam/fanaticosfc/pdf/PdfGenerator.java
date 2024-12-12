@@ -11,34 +11,32 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 @Service
-public class pdfGenerator {
+public class PdfGenerator {
     @Autowired
     VentaRepository ventaRepository;
     @Autowired
     DetalleVentaRepository detalleRepository;
 
+    //Fuentes
+    Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
+    Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);;
+    Font paragraphFont = FontFactory.getFont(FontFactory.HELVETICA,11);
+    Paragraph enter = new Paragraph("\n");
+
+    //Fecha
+    LocalDateTime fechaActual = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    String fechaFormateada = fechaActual.format(formatter);
+
     public void createCustomPdf(String dest) throws Exception {
-
-        //Fuentes
-        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16);
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);;
-        Font paragraphFont = FontFactory.getFont(FontFactory.HELVETICA,11);
-        Paragraph enter = new Paragraph("\n");
-
-        //Fecha
-        LocalDateTime fechaActual = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        String fechaFormateada = fechaActual.format(formatter);
 
         //************* CONSULTAS ***********
         // Obtener el empleado del mes

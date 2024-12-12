@@ -47,7 +47,7 @@
                 <tbody>
                 <tr th:each="venta : ${venta}">
                   <td th:text="${venta.idVenta}"></td>
-                  <td th:text="${venta.fechaVenta}"></td>
+                  <td th:text="${#temporals.format(venta.fechaVenta, 'dd-MM-yyyy HH:mm:ss')}"></td>
                   <td th:text="${venta.montoTotal}"></td>
                   <td th:text="${venta.ventaCredito ? 'Sí' : 'No'}"></td>
                   <td th:text="${venta.usuario.username}"></td>

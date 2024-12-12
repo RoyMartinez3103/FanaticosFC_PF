@@ -49,7 +49,7 @@
                 <tbody>
                 <tr th:each="pago : ${pago}">
                   <td th:text="${pago.idPago}"></td>
-                  <td th:text="${pago.fechaPago}"></td>
+                  <td th:text="${#temporals.format(pago.fechaPago, 'dd-MM-yyyy HH:mm:ss')}"></td>
                   <td th:text="${pago.monto}"></td>
                   <td th:text="${pago.ventaCredito.deudor.nombre + ' ' + pago.ventaCredito.deudor.apellidoPat}"></td>
                   <td th:text="${pago.ventaCredito.idVentaCredito}"></td>
