@@ -23,15 +23,22 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h5 class="h5 mb-2 text-primary"><strong><p th:text="${contenido}"></p></strong></h5>
-                    <p class="mb-4"><p th:text="${subtitulo}"></p>
+                <div class="d-sm-flex mb-4 align-items-start justify-content-between">
+                    <div>
+                        <h5 class="h5 text-primary mb-2">
+                            <strong><span th:text="${contenido}"></span></strong>
+                        </h5>
+                        <p class="mb-0"><span th:text="${subtitulo}"></span></p>
+                    </div>
                     <form th:action="@{/pdf}" method="get">
-                        <button type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <button type="submit" class="btn btn-sm btn-primary shadow-sm">
                             <i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte
                         </button>
                     </form>
                 </div>
+
+
+
 
                 <div class="row">
 

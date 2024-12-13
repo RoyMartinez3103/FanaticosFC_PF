@@ -4,7 +4,7 @@
 --
 
 -- DROP DATABASE IF EXISTS FANATICOS_DB;
--- CREATE DATABASE FANATICOS_DB;
+ CREATE DATABASE FANATICOS_DB;
    USE FANATICOS_DB;
 
 --
@@ -211,12 +211,7 @@ INSERT INTO DEUDOR (NOMBRE, APELLIDO_PAT, APELLIDO_MAT, TELEFONO, MAIL) VALUES
   ('Isabel', 'Sánchez', 'López', '5532125678', 'isabel_sanchez@correo.com'),
   ('Carlos', 'Martínez', 'Gómez', '5576543210', 'carlosmartinez1990@yahoo.com'),
   ('Ana', 'González', 'Pérez', '5565432109', 'ana.gonzalez@outlook.com'),
-  ('José', 'Pérez', 'Sánchez', '5554321098', 'joseperez@protonmail.com'),
-  ('Laura', 'Ramírez', 'Torres', '5543210987', 'lauraramirez@icloud.com'),
-  ('Miguel', 'Torres', 'Ruiz', '5532109876', 'migueltorres@mail.com'),
-  ('Sofía', 'Flores', 'Vargas', '5521098765', 'sofia_flores83@correo.com'),
-  ('David', 'Vargas', 'Jiménez', '5510987654', 'david.vargas@empresa.mx'),
-  ('Carmen', 'Jiménez', 'Moreno', '5587654321', 'carmen.jimenez@trabajo.com');
+  ('José', 'Pérez', 'Sánchez', '5554321098', 'joseperez@protonmail.com');
 
 
 INSERT INTO EQUIPO (NOMBRE, PAIS, LIGA) VALUES
@@ -254,7 +249,7 @@ INSERT INTO PLAYERA (COLOR, TALLA, TIPO_MANGA, PRECIO_REAL, STOCK, PRECIO_VENTA,
 
 INSERT INTO USUARIO (NOMBRE, APELLIDO_PAT, APELLIDO_MAT, FECHA_NAC, RFC, USERNAME, PASSWORD, MAIL, ROL, VENTAS_REALIZADAS) VALUES
 ('Ana', 'García', 'López', '1990-01-01', 'GALA9001017D5', 'ana_garcia', '$2a$12$JVZLD0ZCvKjiveT4.Z/tW.ilsO.AgNd0p4NTlO7UjDXWrVrCJTZk6', 'ana_garcia@correo.com', "ADMIN", 3),  -- ADMIN
-('Juan', 'Pérez', 'Martínez', '1985-07-15', 'PEMJ8507159O4', 'juan_perez', '$2a$12$MHclC1krGAgPUHwNdGr7uOqP1VcCf8LX8ZPCOV0FYzEfiXptoxo6C', 'juan_perez@correo.com', "USER", 2),
+('Juan', 'Pérez', 'Martínez', '1985-07-15', 'PEMJ8507159O4', 'juan_perez', '$2a$12$MHclC1krGAgPUHwNdGr7uOqP1VcCf8LX8ZPCOV0FYzEfiXptoxo6C', 'juan_perez@correo.com', "USER", 5),
 ('María', 'Gómez', 'Hernández', '2000-12-24', 'GOHM001224R2A', 'maria_gomez', '$2a$12$ublIab/ToBmgeAD3qqL66OLX19p0f/ZdRSx7eKAvaxpI9ggEXscGC', 'maria_gomez@correo.com', "USER", 2);
 
 
@@ -264,14 +259,16 @@ INSERT INTO ESTATUS_VENTA(ESTATUS,DESCRIPCION) VALUES
 ('CANCELADA', 'LA VENTA FUE CANCELADA');
 
 INSERT INTO VENTA (MONTO_TOTAL, FECHA_VENTA, ES_VENTA_CREDITO,ID_USUARIO,ID_ESTATUS_VENTA) VALUES
-(3897.0, '2024-06-01 10:00:00', 0, 1,1),
-(1199.0, '2024-06-02 11:30:00', 1, 3,2),
-(3398.0, '2024-06-03 14:45:00', 0, 1,1),
-(5996.0, '2024-06-04 16:15:00', 1, 2,2),
-(5026.0,'2024-09-28 11:11:11',0,2,1),
-(4297.0,'2024-09-28 14:15:10',1,1,2),
-(5996.0,'2024-09-29 10:20:00',0,3,1),
-(5546.0,'2024-09-30 11:35:20',0,3,1);
+(3897.0, '2024-06-01 10:00:00', 0, 1, 1), -- 1
+(1199.0, '2024-06-02 11:30:00', 1, 3, 2), -- 2
+(3398.0, '2024-06-03 14:45:00', 0, 1, 1), -- 3
+(5996.0, '2024-06-04 16:15:00', 1, 2, 2), -- 4
+(2498.0, '2024-07-11 10:15:00', 0, 2, 1), -- 5
+(5026.0, '2024-09-28 11:11:11', 0, 2, 1), -- 6
+(4297.0, '2024-09-28 14:15:10', 1, 1, 2), -- 7
+(5996.0, '2024-09-29 10:20:00', 0, 3, 1), -- 8
+(5546.0, '2024-09-30 11:35:20', 0, 2, 1), -- 9
+(1599.0, '2024-12-10 18:35:20', 0, 2, 1); -- 10
 
 
 INSERT INTO DETALLE_VENTA (CANTIDAD_PLAYERAS, ID_PLAYERA, ID_VENTA) VALUES
@@ -279,16 +276,19 @@ INSERT INTO DETALLE_VENTA (CANTIDAD_PLAYERAS, ID_PLAYERA, ID_VENTA) VALUES
 (1, 3, 2),
 (2, 5, 3),
 (4, 4, 4),
-(1, 7, 5),
-(1, 10, 5),
-(1, 11, 5),
-(1, 12, 5),
-(2, 1, 6),
-(1, 5, 6),
-(3, 7, 7),
-(1, 3, 7),
-(3, 2, 8),
-(1, 9, 8);
+(1, 3, 5),
+(1, 13, 5),
+(1, 7, 6),
+(1, 10, 6),
+(1, 11, 6),
+(1, 12, 6),
+(2, 1, 7),
+(1, 5, 7),
+(3, 7, 8),
+(1, 3, 8),
+(3, 2, 9),
+(1, 9, 9),
+(1, 15, 10);
 
 INSERT INTO VENTA_CREDITO (MONTO_RESTANTE, PAGOS_REALIZADOS, ID_DEUDOR, ID_VENTA) VALUES
 (799.0,1,1,2),

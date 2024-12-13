@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layout :: head}"></head>
+<body>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="text-center">
+    <p class="lead text-gray-800 mb-3" th:text="${statusCode}"></p>
+
+    <div class="error text-center mb-4" data-text="ERROR" >ERROR</div>
+
+    <img th:src="@{/img/sad-player.png}" alt="sad-player" id="imagen"
+         class="img-fluid mb-2"
+         style="max-width: 400px;">
+
+    <p class="text-gray-800 mb-3">Parece que encontraste un error en la matrix...</p>
+
+    <a th:href="@{/}">
+      &larr; Volver al Inicio
+    </a>
+  </div>
+</div>
+</body>
+</html>
