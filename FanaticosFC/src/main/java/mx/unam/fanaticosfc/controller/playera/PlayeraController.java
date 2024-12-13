@@ -42,6 +42,8 @@ public class PlayeraController {
     @GetMapping("/lista-playera")
     public String listaPlayera(Model model){
         model.addAttribute("playera",playeraService.listarTodos());
+        model.addAttribute("contenido","Playeras registradas");
+        model.addAttribute("subtitulo","Se muestran las playeras registradas en el sistema");
         return "/playera/lista-playera"; //se retorna el html
     }
 
@@ -55,15 +57,16 @@ public class PlayeraController {
         model.addAttribute("marca",marcas);
         model.addAttribute("playera",playera);
         model.addAttribute("contenido","Agregar nueva playera");
+        model.addAttribute("subtitulo","Ingresa los datos para registrar la nueva playera.");
         return "/playera/alta-playera";
     }
 
     @PostMapping("/salvar-playera")
     public String salvarPlayera(@Valid @ModelAttribute("playera") Playera playera,
                                 BindingResult result,
-                              @RequestParam("imagen") MultipartFile imageFile,
-                              Model model,
-                              RedirectAttributes flash) throws IOException {
+                                @RequestParam("imagen") MultipartFile imageFile,
+                                Model model,
+                                RedirectAttributes flash) throws IOException {
         try {
             if (!imageFile.isEmpty()) {
                 String directorioUploads = "C:/uploads/";

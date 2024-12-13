@@ -109,6 +109,8 @@ public class VentaController {
             tallasDisponibles.put(playera.getIdPlayera(), mapaTallasIds);
         }
 
+        model.addAttribute("contenido","Resumen de playeras seleccionadas");
+        model.addAttribute("subtitulo","Confirma los datos antes de proceder con la venta.");
         model.addAttribute("ventaDTO",ventadto);
         model.addAttribute("selectedJerseys",selectedJerseys);
         model.addAttribute("tallasDisponibles",tallasDisponibles);
@@ -144,6 +146,8 @@ public class VentaController {
             tallasDisponibles.put(playera.getIdPlayera(), mapaTallasIds);
         }
 
+        model.addAttribute("contenido","Resumen de playeras seleccionadas");
+        model.addAttribute("subtitulo","Confirma los datos antes de proceder con la venta.");
         model.addAttribute("deudor",deudores);
         model.addAttribute("ventaDTO",ventaCreditoDTO);
         model.addAttribute("selectedJerseys",selectedJerseys);

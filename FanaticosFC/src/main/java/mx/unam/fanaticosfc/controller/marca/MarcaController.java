@@ -25,6 +25,8 @@ public class MarcaController {
     @GetMapping("/lista-marca")
     public String listaMarca(Model model){
         model.addAttribute("marca",marcaService.listarTodos());
+        model.addAttribute("contenido","Lista de Marcas");
+        model.addAttribute("subtitulo","Se muestran las marcas registradas en el sistema.");
         return "/marca/lista-marca"; //se retorna el html
     }
 
@@ -32,6 +34,7 @@ public class MarcaController {
     public String altaMarca(Model model){
         Marca marca = new Marca();
         model.addAttribute("contenido","Agregar nueva marca");
+        model.addAttribute("subtitulo","Ingresar los datos correspondientes de la nueva Marca.");
         model.addAttribute("marca",marca);
         return "/marca/alta-marca";
     }

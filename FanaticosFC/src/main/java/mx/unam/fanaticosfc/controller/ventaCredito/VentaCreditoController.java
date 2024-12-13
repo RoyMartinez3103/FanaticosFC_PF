@@ -19,6 +19,8 @@ public class VentaCreditoController {
     @GetMapping("/lista-creditos")
     public String listaCreditos(Model model){
         model.addAttribute("credito",creditoService.listarTodos());
+        model.addAttribute("contenido","Lista de Ventas a Crédito");
+        model.addAttribute("subtitulo","Se muestran todas las ventas a crédito registradas.");
         return "/credito/lista-creditos";
     }
 }

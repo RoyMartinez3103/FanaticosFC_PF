@@ -20,8 +20,7 @@ El sistema permite gestionar el inventario, administrar las ventas y generar rep
     - Estadísticas históricas
     - Tickets de ventas
 
--  .
-   📈  **Dashboard de Estadísticas**:
+-   📈  **Dashboard de Estadísticas**:
     - Tarjetas que se actualizan cada mes
     - Gráficas históricas 
 
@@ -98,6 +97,8 @@ El sistema permite gestionar el inventario, administrar las ventas y generar rep
 - **Estadísticas**:
     - Visualizar tendencias de venta y playeras populares.
     - Así como los usuarios que más venden.
+- **Uso de Logs**:
+- Se implementa SLF4J para realizar logging dentro del sistema.
 
 ## 👦 Autor
 - [@Rodrigo Martínez Zambrano](https://github.com/RoyMartinez3103)

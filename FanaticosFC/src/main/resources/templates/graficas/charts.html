@@ -24,7 +24,8 @@
             <div class="container-fluid">
 
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800" th:text="${contenido}"></h1>
+                    <h5 class="h5 mb-2 text-primary"><strong><p th:text="${contenido}"></p></strong></h5>
+                    <p class="mb-4"><p th:text="${subtitulo}"></p>
                     <form th:action="@{/pdf}" method="get">
                         <button type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                             <i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte

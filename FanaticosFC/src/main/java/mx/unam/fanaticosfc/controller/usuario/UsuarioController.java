@@ -25,6 +25,8 @@ public class UsuarioController {
     @GetMapping("/lista-usuario")
     public String listaUsuario(Model model){
         model.addAttribute("usuario",usuarioService.listarTodos());
+        model.addAttribute("contenido","Usuarios Registrados");
+        model.addAttribute("subtitulo","Se muestran los usuarios registrados en el sistema.");
         return "/usuario/lista-usuario";
     }
 
@@ -32,6 +34,7 @@ public class UsuarioController {
     public String altaUsuario(Model model){
         Usuario usuario = new Usuario();
         model.addAttribute("contenido","Agregar nuevo usuario");
+        model.addAttribute("subtitulo","Ingresar los datos del nuevo usuario.");
         model.addAttribute("usuario",usuario);
         return "/usuario/alta-usuario";
     }

@@ -28,6 +28,8 @@ public class PagosCreditoController {
     @GetMapping("/lista-pagos")
     public String listaPagos(Model model){
         model.addAttribute("pago",pagosService.listarTodos());
+        model.addAttribute("contenido","Pagos Registrados");
+        model.addAttribute("subtitulo","Se muestran los pagos de los clientes para liquidar su venta a crédito.");
         return "/pagos/lista-pagos";
     }
 
@@ -38,6 +40,7 @@ public class PagosCreditoController {
         pago.setVentaCredito(ventaCredito);
 
         model.addAttribute("contenido","Registrar un pago");
+        model.addAttribute("subtitulo","Ingresa el abono de la venta a crédito.");
         model.addAttribute("pago",pago);
         model.addAttribute("ventaCredito",ventaCredito);
         return "/pagos/form-pago";

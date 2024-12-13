@@ -26,13 +26,16 @@ public class DeudorController {
     @GetMapping("/lista-deudor")
     public String listaDeudor(Model model){
         model.addAttribute("deudor",deudorService.listarTodos());
+        model.addAttribute("contenido","Lista de Clientes");
+        model.addAttribute("subtitulo","Se muestran los clientes que realizarón venta a crédito.");
         return "/deudor/lista-deudor";
     }
 
     @GetMapping("/alta-deudor")
     public String altaDeudor(Model model){
         Deudor deudor = new Deudor();
-        model.addAttribute("contenido","Agregar nuevo deudor");
+        model.addAttribute("contenido","Agregar nuevo Cliente");
+        model.addAttribute("subtitulo","Ingresa los datos del cliente.");
         model.addAttribute("deudor",deudor);
         return "/deudor/alta-deudor";
     }
@@ -60,7 +63,7 @@ public class DeudorController {
         try {
             deudorService.borrar(id);
             flash.addFlashAttribute("success", "El deudor se borró correctamente.");
-            logger.info("Se eliminó el Deudor con ID: " + id);
+            logger.info("Se eliminó el Deudor con ID: {}", id);
         } catch (DataIntegrityViolationException e) {
             // Este error ocurre cuando hay violación de integridad referencial
             flash.addFlashAttribute("error",

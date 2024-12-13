@@ -24,6 +24,8 @@ public class EquipoController {
     @GetMapping("/lista-equipo")
     public String listaEquipo(Model model){
         model.addAttribute("equipo",equipoService.listarTodos());
+        model.addAttribute("contenido","Lista de Equipos");
+        model.addAttribute("subtitulo", "Equipos registrados en el sistema.");
         return "/equipo/lista-equipo";
     }
 
@@ -31,6 +33,7 @@ public class EquipoController {
     public String altaEquipo(Model model){
         Equipo equipo = new Equipo();
         model.addAttribute("contenido","Agregar nuevo equipo");
+        model.addAttribute("subtitulo", "Ingresar los datos del nuevo equipo");
         model.addAttribute("equipo",equipo);
         return "/equipo/alta-equipo";
     }

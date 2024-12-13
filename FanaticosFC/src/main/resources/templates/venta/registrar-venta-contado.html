@@ -13,10 +13,8 @@
             <div th:replace="~{layout/layout :: topbar}"></div>
 
             <div class="container-fluid">
-                <h1 class="h3 mb-2 text-gray-800">
-                    <strong>Resumen de Playeras Seleccionadas</strong>
-                </h1>
-                <p class="mb-4">Confirma los datos antes de proceder con la venta.</p>
+                <h5 class="h5 mb-2 text-primary"><strong><p th:text="${contenido}"></p></strong></h5>
+                <p class="mb-4"><p th:text="${subtitulo}"></p>
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -64,7 +62,7 @@
                                                            onchange="updateSubtotal(this)">
                                                 </td>
                                                 <td th:text="${'$ ' + selectedJerseys[iterStat.index].precioVenta}"></td>
-                                                <td id="subtotal-${iterStat.index}">0.00</td> <!-- Subtotal calculado en frontend -->
+                                                <td id="subtotal-${'$ '+ iterStat.index}">0.00</td> <!-- Subtotal calculado en frontend -->
                                                 <td>
                                                     <button type="button" class="btn btn-success btn-sm" onclick="duplicateRow(this)">
                                                         <i class="fas fa-copy"></i> Duplicar
@@ -78,8 +76,8 @@
 
                                             <tfoot>
                                             <tr>
-                                                <td colspan="6" class="text-right"><strong>Total:</strong></td>
-                                                <td id="total"><strong th:text="${ventaDTO.montoTotal}"></strong></td>
+                                                <td colspan="6" class="text-right"><strong>Total: $</strong></td>
+                                                <td id="total">0.00<strong th:text="${ventaDTO.montoTotal}"></strong></td>
                                             </tr>
                                             </tfoot>
                                         </table>
@@ -151,54 +149,55 @@
 </script>
 
 <script>
-    function updateSubtotal(input) {
-    // Obtener la fila que contiene el input
-    const row = input.closest('tr');
+    // Función para inicializar los subtotales y el total
+    function initializeSubtotalsAndTotal() {
+        // Recorrer todas las filas de la tabla
+        document.querySelectorAll('tbody tr').forEach(row => {
+            const inputCantidad = row.querySelector('.cantidad-input');
+            const precioUnitario = parseFloat(inputCantidad.getAttribute('data-preciounitario')) || 0;
+            const cantidad = parseInt(inputCantidad.value) || 1; // Por defecto la cantidad es 1
+            const subtotal = precioUnitario * cantidad;
 
-    // Obtener el precio unitario como un número
-    const precioUnitario = parseFloat(input.getAttribute('data-preciounitario'));
+            // Establecer el subtotal
+            const subtotalCell = row.querySelector('[id^="subtotal-"]');
+            subtotalCell.textContent = subtotal.toFixed(2); // Mostrar con dos decimales
+        });
 
-    // Verificar si el precio unitario es un número válido
-    if (isNaN(precioUnitario)) {
-        console.error('Precio unitario no válido:', input.getAttribute('data-preciounitario'));
-        return;
-    }
-
-    // Obtener la cantidad ingresada como un número entero
-    const cantidad = parseInt(input.value) || 0;
-
-    // Verificar que la cantidad sea válida
-    if (isNaN(cantidad) || cantidad <= 0) {
-        console.error('Cantidad no válida:', input.value);
-        row.querySelector('[id^="subtotal-"]').textContent = '0.00';
+        // Actualizar el total
         updateTotal();
-        return;
     }
 
-    // Calcular el subtotal
-    const subtotal = precioUnitario * cantidad;
+    // Llamar a la función al cargar la página
+    document.addEventListener('DOMContentLoaded', initializeSubtotalsAndTotal);
 
-    // Mostrar el subtotal en la celda correspondiente
-    const subtotalCell = row.querySelector('[id^="subtotal-"]');
-    subtotalCell.textContent = subtotal.toFixed(2); // Mostrar el subtotal con dos decimales
+    function updateSubtotal(input) {
+        const row = input.closest('tr');
+        const precioUnitario = parseFloat(input.getAttribute('data-preciounitario')) || 0;
+        const cantidad = parseInt(input.value) || 0;
 
-    // Actualizar el total
-    updateTotal();
-}
+        if (isNaN(cantidad) || cantidad <= 0) {
+            console.error('Cantidad no válida:', input.value);
+            row.querySelector('[id^="subtotal-"]').textContent = '0.00';
+            updateTotal();
+            return;
+        }
 
-function updateTotal() {
-    let total = 0;
+        const subtotal = precioUnitario * cantidad;
+        const subtotalCell = row.querySelector('[id^="subtotal-"]');
+        subtotalCell.textContent = subtotal.toFixed(2);
 
-    // Recorrer todas las celdas de subtotales y sumar los valores
-    document.querySelectorAll('[id^="subtotal-"]').forEach(cell => {
-        total += parseFloat(cell.textContent) || 0; // Asegurarse de que no sea NaN
-    });
+        updateTotal();
+    }
 
-    // Mostrar el total en la celda correspondiente
-    document.getElementById('total').textContent = total.toFixed(2); // Mostrar el total con dos decimales
-}
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('[id^="subtotal-"]').forEach(cell => {
+            total += parseFloat(cell.textContent) || 0;
+        });
+
+        document.getElementById('total').textContent = total.toFixed(2);
+    }
 </script>
-
 
 
 <div th:replace="~{layout/layout :: scripts}"></div>

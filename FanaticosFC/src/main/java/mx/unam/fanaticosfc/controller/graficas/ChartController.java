@@ -35,6 +35,7 @@ public class ChartController {
         }
 
         model.addAttribute("contenido","Estadísticas");
+        model.addAttribute("subtitulo","Se muestran estadísticas mensuales e históricas");
         model.addAttribute("nombres",nombres);
         model.addAttribute("montos",ventas);
 

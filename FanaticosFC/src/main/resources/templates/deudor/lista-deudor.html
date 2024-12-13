@@ -20,16 +20,16 @@
       <!-- Begin Page Content -->
       <div class="container-fluid">
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800" th:text="${contenido}"></h1>
+        <h5 class="h5 mb-2 text-primary"><strong><p th:text="${contenido}"></p></strong></h5>
+        <p class="mb-4"><p th:text="${subtitulo}"></p>
 
         <div th:replace="~{layout/layout :: alerts}"></div>
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Deudores Registrados</h6>
             <a th:href="@{/deudor/alta-deudor}" class="btn btn-primary btn-sm float-right">
-              <i class="fas fa-plus"></i> Agregar Deudor
+              <i class="fas fa-plus"></i> Agregar Cliente
             </a>
           </div>
           <div class="card-body">
